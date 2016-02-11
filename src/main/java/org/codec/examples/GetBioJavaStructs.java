@@ -11,24 +11,34 @@ import org.apache.commons.io.IOUtils;
 import org.biojava.nbio.structure.Structure;
 import org.codec.decoder.DecodeStructure;
 
-import com.twitter.chill.Base64.InputStream;
-
 public class GetBioJavaStructs {
-
+	// Get the baseUrl
 	private String baseUrl = "http://132.249.213.68:8080/servemessagepack/";
-
-	// Get the data from a specified url
+	
+	
+	/**
+	 * 
+	 * @param inputCode
+	 * @return A biojava structure object
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public Structure getFromUrl(String inputCode) throws MalformedURLException, IOException{
 		DecodeStructure ds = new DecodeStructure();
 		// Get these as an inputstream
 		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream()); //idiom
-
-		System.out.println(b.length);
+		// Now get the actual structure
 		return ds.getStructFromByteArray(b);
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @param inputBytes -> gzip compressed byte
+	 * array
+	 * @return A deflated byte array
+	 * @throws IOException
+	 */
 	private byte[] deflateGzip(byte[] inputBytes) throws IOException{
 
 		ByteArrayInputStream bis = new ByteArrayInputStream(inputBytes);

@@ -30,7 +30,6 @@ import org.biojava.nbio.structure.quaternary.BiologicalAssemblyTransformation;
 import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.biojava.nbio.structure.xtal.SpaceGroup;
 
-// 
 import org.codec.dataholders.BioAssemblyInfoNew;
 import org.codec.dataholders.BiologicalAssemblyTransformationNew;
 import org.codec.dataholders.HadoopDataStructDistBean;
@@ -124,6 +123,12 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		group.addAtom(atom);
 	}
 
+	/**
+	 * Function to create bonds in the biojava structure objects
+	 * @param indOne The first index
+	 * @param indTwo The second index
+	 * @param bondOrder The bond order
+	 */
 	public void setBondOrders(int indOne, int indTwo, int bondOrder){
 		// Get the atom
 		Atom atomOne = group.getAtom(indOne);
@@ -134,18 +139,18 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	}
 	
 	
-	
-	public void setOtherInfo(HadoopDataStructDistBean xs) {
-
-		// Get the BioAssemly data
-		Map<Integer, BioAssemblyInfoNew> bioData = xs.getBioAssembly();
+	/**
+	 * Function to use the further information in the bean to set this extra info
+	 * @param inputBean
+	 */
+	public void setOtherInfo(HadoopDataStructDistBean inputBean) {
 		// Get the Xtalographic info
-		String spaceGroup = xs.getSpaceGroup();
-		List<Double> unitCell = xs.getUnitCell();
+		String spaceGroup = inputBean.getSpaceGroup();
+		List<Double> unitCell = inputBean.getUnitCell();
 		// Get the header
 		PDBHeader pdbHeader = this.structure.getPDBHeader();
-		// 
-		Map<Integer, BioAssemblyInfoNew> oldAss = xs.getBioAssembly();
+		// Get the bioassebly data
+		Map<Integer, BioAssemblyInfoNew> oldAss = inputBean.getBioAssembly();
 		Map<Integer,BioAssemblyInfo> bioAssemblies = new HashMap<Integer,BioAssemblyInfo>();
 		for(Integer key: oldAss.keySet()){
 			// Get the old info

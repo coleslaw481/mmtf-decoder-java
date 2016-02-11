@@ -134,9 +134,6 @@ public class DecodeStructure {
 						int thisBondIndTwo = bondInds.get(thisBond*2+1);
 						bioJavaStructInflator.setBondOrders(thisBondIndOne, thisBondIndTwo, thisBondOrder);
 					}
-
-					
-					
 				}
 				chainCounter++;
 			}
