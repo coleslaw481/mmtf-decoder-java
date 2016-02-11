@@ -107,7 +107,9 @@ public class DecodeStructure {
 					}
 					// A counter for the atom information
 					int atomCounter = 0;
-										
+					System.out.println(thisGroup.getResName());
+					System.out.println(g);
+
 					// Now read the next atoms
 					for(int i=lastCount; i<lastCount+atomCount;i++){
 						// Now get all the relevant information here
