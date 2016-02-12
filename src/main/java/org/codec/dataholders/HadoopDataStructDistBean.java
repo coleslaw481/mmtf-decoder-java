@@ -15,16 +15,6 @@ public class HadoopDataStructDistBean {
 	private String pdbCode;
 	// The title of the structure
 	private String title;
-	// OTHER PDB HEADER INFORMATION
-	private String description;
-	
-	private String classification;	
-	private Date depDate;
-	private Date modDate;
-	private float resolution;
-	private float rFree;
-	private String doi;
-	private String authors;
 	// Total data for memory allocation
 	private int numAtoms;
 	// Add this to store the model information
@@ -46,38 +36,34 @@ public class HadoopDataStructDistBean {
 	private  Map<Integer, PDBGroup> groupMap = new HashMap<Integer, PDBGroup>();
 	
 	// For the big arrays split into two -> one of 32 bit ints, one of 16
-	private byte[] cartn_x_big;
-	private byte[] cartn_y_big;
-	private byte[] cartn_z_big;
-	private byte[] b_factor_big;
+	private byte[] xCoordBig;
+	private byte[] yCoordBig;
+	private byte[] zCoordBig;
+	private byte[] bFactorBig;
 	// Now for the small ints -> 16 bit
-	private byte[] cartn_x_small;
-	private byte[] cartn_y_small;
-	private byte[] cartn_z_small;
-	private byte[] b_factor_small;
+	private byte[] xCoordSmall;
+	private byte[] yCoordSmall;
+	private byte[] zCoordSmall;
+	private byte[] bFactorSmall;
 	
 	
 	// The secondary structure -> stored as 8 bit ints
-	private byte[] secStruct;
+	private byte[] secStructList;
 	
 	// Run length encoded 
-	private byte[] occupancy;
+	private byte[] occList;
 	// Run length encoded
-	private List<String> _atom_site_label_alt_id= new ArrayList<String>();
+	private List<String> altLabelList= new ArrayList<String>();
 	// Run length encoded
-	private List<String> _atom_site_pdbx_PDB_ins_code = new ArrayList<String>();
-	// Run length encoded
-	private List<Integer> _atom_site_pdbx_PDB_model_num =new ArrayList<Integer>();
+	private List<String> insCodeList = new ArrayList<String>();
 	
 	
 	// Delta and run length encoded
-	private byte[] resOrder;
+	private byte[] groupTypeList;
 	// Delta and run length
-	private byte[]  _atom_site_auth_seq_id;
+	private byte[]  resNumList;
 	// Delta and run length encoded
-	private byte[] _atom_site_label_entity_poly_seq_num;
-	// Delta and run length encoded
-	private byte[] _atom_site_id; 
+	private byte[] atomIdList; 
 
 
 	public String getSpaceGroup() {
@@ -93,71 +79,65 @@ public class HadoopDataStructDistBean {
 		this.unitCell = unitCell;
 	}
 
-	public byte[] get_atom_site_auth_seq_id() {
-		return _atom_site_auth_seq_id;
+	public byte[] getResNumList() {
+		return resNumList;
 	}	
-	public void set_atom_site_auth_seq_id(byte[] _atom_site_auth_seq_id) {
-		this._atom_site_auth_seq_id = _atom_site_auth_seq_id;
+	public void setResNumList(byte[] _atom_site_auth_seq_id) {
+		this.resNumList = _atom_site_auth_seq_id;
 	}
-	public byte[] getCartn_x_big() {
-		return cartn_x_big;
+	public byte[] getxCoordBig() {
+		return xCoordBig;
 	}
-	public void setCartn_x_big(byte[] cartn_x_big) {
-		this.cartn_x_big = cartn_x_big;
+	public void setxCoordBig(byte[] cartn_x_big) {
+		this.xCoordBig = cartn_x_big;
 	}
-	public byte[] getCartn_y_big() {
-		return cartn_y_big;
+	public byte[] getyCoordBig() {
+		return yCoordBig;
 	}
-	public void setCartn_y_big(byte[] cartn_y_big) {
-		this.cartn_y_big = cartn_y_big;
+	public void setyCoordBig(byte[] cartn_y_big) {
+		this.yCoordBig = cartn_y_big;
 	}
-	public byte[] getCartn_z_big() {
-		return cartn_z_big;
+	public byte[] getzCoordBig() {
+		return zCoordBig;
 	}
-	public void setCartn_z_big(byte[] cartn_z_big) {
-		this.cartn_z_big = cartn_z_big;
+	public void setzCoordBig(byte[] cartn_z_big) {
+		this.zCoordBig = cartn_z_big;
 	}
-	public byte[] getCartn_x_small() {
-		return cartn_x_small;
+	public byte[] getxCoordSmall() {
+		return xCoordSmall;
 	}
-	public void setCartn_x_small(byte[] cartn_x_small) {
-		this.cartn_x_small = cartn_x_small;
+	public void setxCoordSmall(byte[] cartn_x_small) {
+		this.xCoordSmall = cartn_x_small;
 	}
-	public byte[] getCartn_y_small() {
-		return cartn_y_small;
+	public byte[] getyCoordSmall() {
+		return yCoordSmall;
 	}
-	public void setCartn_y_small(byte[] cartn_y_small) {
-		this.cartn_y_small = cartn_y_small;
+	public void setyCoordSmall(byte[] cartn_y_small) {
+		this.yCoordSmall = cartn_y_small;
 	}
-	public byte[] getCartn_z_small() {
-		return cartn_z_small;
+	public byte[] getzCoordSmall() {
+		return zCoordSmall;
 	}
-	public void setCartn_z_small(byte[] cartn_z_small) {
-		this.cartn_z_small = cartn_z_small;
+	public void setzCoordSmall(byte[] cartn_z_small) {
+		this.zCoordSmall = cartn_z_small;
 	}
-	public byte[] getB_factor_big() {
-		return b_factor_big;
+	public byte[] getbFactorBig() {
+		return bFactorBig;
 	}
-	public void setB_factor_big(byte[] b_factor_big) {
-		this.b_factor_big = b_factor_big;
+	public void setbFactorBig(byte[] b_factor_big) {
+		this.bFactorBig = b_factor_big;
 	}
-	public byte[] getB_factor_small() {
-		return b_factor_small;
+	public byte[] getbFactorSmall() {
+		return bFactorSmall;
 	}
-	public void setB_factor_small(byte[] b_factor_small) {
-		this.b_factor_small = b_factor_small;
+	public void setbFactorSmall(byte[] b_factor_small) {
+		this.bFactorSmall = b_factor_small;
 	}
-	public byte[] get_atom_site_label_entity_poly_seq_num() {
-		return _atom_site_label_entity_poly_seq_num;
+	public List<String> getAltLabelList() {
+		return altLabelList;
 	}
-	public void set_atom_site_label_entity_poly_seq_num(byte[] _atom_site_label_entity_poly_seq_num) {
-		this._atom_site_label_entity_poly_seq_num = _atom_site_label_entity_poly_seq_num;
-	}
-	public List<String> get_atom_site_label_alt_id() {
-		return _atom_site_label_alt_id;
-	}
-	public void set_atom_site_label_alt_id(List<String> _atom_site_label_alt_id) {
-		this._atom_site_label_alt_id = _atom_site_label_alt_id;
+	public void setAltLabelList(List<String> _atom_site_label_alt_id) {
+		this.altLabelList = _atom_site_label_alt_id;
 	}
 
 	public Map<Integer, BioAssemblyInfoNew> getBioAssembly() {
@@ -191,23 +171,17 @@ public class HadoopDataStructDistBean {
 	public void setNumAtoms(int numAtoms) {
 		this.numAtoms = numAtoms;
 	}
-	public byte[] getOccupancy() {
-		return occupancy;
+	public byte[] getOccList() {
+		return occList;
 	}
-	public void setOccupancy(byte[] occupancy) {
-		this.occupancy = occupancy;
+	public void setOccList(byte[] occupancy) {
+		this.occList = occupancy;
 	}
-	public List<String> get_atom_site_pdbx_PDB_ins_code() {
-		return _atom_site_pdbx_PDB_ins_code;
+	public List<String> getInsCodeList() {
+		return insCodeList;
 	}
-	public void set_atom_site_pdbx_PDB_ins_code(List<String> _atom_site_pdbx_PDB_ins_code) {
-		this._atom_site_pdbx_PDB_ins_code = _atom_site_pdbx_PDB_ins_code;
-	}
-	public List<Integer> get_atom_site_pdbx_PDB_model_num() {
-		return _atom_site_pdbx_PDB_model_num;
-	}
-	public void set_atom_site_pdbx_PDB_model_num(List<Integer> _atom_site_pdbx_PDB_model_num) {
-		this._atom_site_pdbx_PDB_model_num = _atom_site_pdbx_PDB_model_num;
+	public void setInsCodeList(List<String> _atom_site_pdbx_PDB_ins_code) {
+		this.insCodeList = _atom_site_pdbx_PDB_ins_code;
 	}
 	public Map<Integer, PDBGroup> getGroupMap() {
 		return groupMap;
@@ -215,73 +189,25 @@ public class HadoopDataStructDistBean {
 	public void setGroupMap(Map<Integer, PDBGroup> groupMap) {
 		this.groupMap = groupMap;
 	}
-	public byte[] getSecStruct() {
-		return secStruct;
+	public byte[] getSecStructList() {
+		return secStructList;
 	}
-	public void setSecStruct(byte[] secStruct) {
-		this.secStruct = secStruct;
-	}
-
-	public byte[] getResOrder() {
-		return resOrder;
-	}
-	public void setResOrder(byte[] resOrder) {
-		this.resOrder = resOrder;
+	public void setSecStructList(byte[] secStruct) {
+		this.secStructList = secStruct;
 	}
 
-	public byte[] get_atom_site_id() {
-		return _atom_site_id;
+	public byte[] getGroupTypeList() {
+		return groupTypeList;
 	}
-	public void set_atom_site_id(byte[] _atom_site_id) {
-		this._atom_site_id = _atom_site_id;
+	public void setGroupTypeList(byte[] resOrder) {
+		this.groupTypeList = resOrder;
 	}
-	public String getDescription() {
-		return description;
+
+	public byte[] getAtomIdList() {
+		return atomIdList;
 	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getClassification() {
-		return classification;
-	}
-	public void setClassification(String classification) {
-		this.classification = classification;
-	}
-	public Date getDepDate() {
-		return depDate;
-	}
-	public void setDepDate(Date depDate) {
-		this.depDate = depDate;
-	}
-	public Date getModDate() {
-		return modDate;
-	}
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
-	public float getResolution() {
-		return resolution;
-	}
-	public void setResolution(float resolution) {
-		this.resolution = resolution;
-	}
-	public float getrFree() {
-		return rFree;
-	}
-	public void setrFree(float rFree) {
-		this.rFree = rFree;
-	}
-	public String getDoi() {
-		return doi;
-	}
-	public void setDoi(String doi) {
-		this.doi = doi;
-	}
-	public String getAuthors() {
-		return authors;
-	}
-	public void setAuthors(String authors) {
-		this.authors = authors;
+	public void setAtomIdList(byte[] _atom_site_id) {
+		this.atomIdList = _atom_site_id;
 	}
 	public String getTitle() {
 		return title;
@@ -295,4 +221,5 @@ public class HadoopDataStructDistBean {
 	public void setPdbCode(String pdbCode) {
 		this.pdbCode = pdbCode;
 	}
+
 }

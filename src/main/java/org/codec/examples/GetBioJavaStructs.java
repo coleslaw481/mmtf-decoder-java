@@ -14,6 +14,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.biojava.nbio.structure.Structure;
+import org.codec.decoder.BioJavaStructureInflator;
 import org.codec.decoder.DecodeStructure;
 
 public class GetBioJavaStructs {
@@ -30,10 +31,13 @@ public class GetBioJavaStructs {
 	 */
 	public Structure getFromUrl(String inputCode) throws MalformedURLException, IOException{
 		DecodeStructure ds = new DecodeStructure();
+		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
+
 		// Get these as an inputstream
 		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream()); 
 		// Now get the actual structure
-		return ds.getStructFromByteArray(b);
+		ds.getStructFromByteArray(b, bjs);
+		return bjs.getStructure();
 	}
 	
 	/**
@@ -45,10 +49,12 @@ public class GetBioJavaStructs {
 	 */
 	public Structure getFromFileSystem(String basePath, String pdbCode) throws FileNotFoundException, IOException{
 		DecodeStructure ds = new DecodeStructure();
+		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
 		// Get these as an inputstream
 		byte[] b = IOUtils.toByteArray(new FileInputStream(new File(basePath+"/"+pdbCode.substring(1, 3)+"/"+pdbCode))); 
 		// Now get the actual structure
-		return ds.getStructFromByteArray(b);		
+		ds.getStructFromByteArray(b, bjs);
+		return bjs.getStructure();
 	}
 	
 	

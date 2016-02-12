@@ -30,9 +30,6 @@ import org.biojava.nbio.structure.quaternary.BiologicalAssemblyTransformation;
 import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.biojava.nbio.structure.xtal.SpaceGroup;
 
-import org.codec.dataholders.BioAssemblyInfoNew;
-import org.codec.dataholders.BiologicalAssemblyTransformationNew;
-import org.codec.dataholders.HadoopDataStructDistBean;
 
 
 public class BioJavaStructureInflator implements StructureInflatorInterface {
@@ -44,25 +41,28 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	private Group group;
 	private ChemComp cc = new ChemComp();
 
+	
 	public BioJavaStructureInflator() {
-		this.structure = new StructureImpl();
+		structure = new StructureImpl();
 	}
 
 	public Structure getStructure() {
-		return this.structure;
+		return structure;
 	}
 
-	public void setModelCount(int modelCount) {
-		//		System.out.println("model count: " + modelCount);
-		this.atomCount = 1;
-		this.modelCount = modelCount;
+	/** 
+	 * In biojava this function does nothing
+	 */
+	public void setModelCount(int inputModelCount) {
+		atomCount = 1;
+		modelCount = inputModelCount;
 	}
 
-	public void setModelInfo(int modelNumber, int chainCount) {
+	public void setModelInfo(int inputModelNumber, int chainCount) {
 		//		System.out.println("modelNumber: " + modelNumber + " chainCount: " + chainCount);
-		this.modelNumber = modelNumber;
-		this.atomCount = 1;
-		this.structure.addModel(new ArrayList<Chain>(chainCount));
+		modelNumber = inputModelNumber;
+		atomCount = 1;
+		structure.addModel(new ArrayList<Chain>(chainCount));
 	}
 
 	public void setChainInfo(String chainId, int groupCount) {
@@ -125,8 +125,8 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 
 	/**
 	 * Function to create bonds in the biojava structure objects
-	 * @param indOne The first index
-	 * @param indTwo The second index
+	 * @param indOne The first atom's index
+	 * @param indTwo The second atom's index
 	 * @param bondOrder The bond order
 	 */
 	public void setBondOrders(int indOne, int indTwo, int bondOrder){
@@ -138,41 +138,31 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		
 	}
 	
-	
 	/**
-	 * Function to use the further information in the bean to set this extra info
-	 * @param inputBean
+	 * Function to set the bioassmebly info
+	 * @param inputAssembly
 	 */
-	public void setOtherInfo(HadoopDataStructDistBean inputBean) {
-		// Get the Xtalographic info
-		String spaceGroup = inputBean.getSpaceGroup();
-		List<Double> unitCell = inputBean.getUnitCell();
-		// Get the header
-		PDBHeader pdbHeader = this.structure.getPDBHeader();
+	public void setBioAssembly(Map<Integer, Integer> keyList, Map<Integer, Integer> sizeList, Map<Integer, List<String>> inputIds, Map<Integer, List<String>> inputChainIds, Map<Integer, List<double[]>> inputTransformations){
+		PDBHeader pdbHeader = structure.getPDBHeader();
 		// Get the bioassebly data
-		Map<Integer, BioAssemblyInfoNew> oldAss = inputBean.getBioAssembly();
 		Map<Integer,BioAssemblyInfo> bioAssemblies = new HashMap<Integer,BioAssemblyInfo>();
-		for(Integer key: oldAss.keySet()){
-			// Get the old info
-			BioAssemblyInfoNew bioAssOld = oldAss.get(key);
-			// Make a new one
+		for(Integer key: keyList.keySet()){
+			// Make a biojava bioassembly object
 			BioAssemblyInfo bioAssInfo = new  BioAssemblyInfo();
-			bioAssInfo.setId(bioAssOld.getId());
-			// Set this size
-			bioAssInfo.setMacromolecularSize(bioAssOld.getMacromolecularSize());
+			bioAssInfo.setId(keyList.get(key));
+			// Set size
+			bioAssInfo.setMacromolecularSize(sizeList.get(key));
 			// Now get the new sizes
 			List<BiologicalAssemblyTransformation> newList = new ArrayList<BiologicalAssemblyTransformation>();
-			for(BiologicalAssemblyTransformationNew bioAssTransOld: bioAssOld.getTransforms()){
-	
+			for(int i=0;i<inputIds.get(key).size();i++){
 				BiologicalAssemblyTransformation bioAssTrans = new BiologicalAssemblyTransformation();
-				bioAssTrans.setId(bioAssTransOld.getId());
-				bioAssTrans.setChainId(bioAssTransOld.getChainId());
-				// Now set this matrix
-				Matrix4d mat4d = new Matrix4d(bioAssTransOld.getTransformation());
+				bioAssTrans.setId(inputIds.get(key).get(i));
+				bioAssTrans.setChainId(inputChainIds.get(key).get(i));
+				// Now set matrix
+				Matrix4d mat4d = new Matrix4d(inputTransformations.get(key).get(i));
 				bioAssTrans.setTransformationMatrix(mat4d);
 				// Now add this
 				newList.add(bioAssTrans);
-				
 			}
 			// Now set the transform list
 			bioAssInfo.setTransforms(newList);
@@ -181,17 +171,25 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		}
 		// Now actually set them
 		pdbHeader.setBioAssemblies(bioAssemblies);
-		this.structure.setPDBHeader(pdbHeader);
-
+		structure.setPDBHeader(pdbHeader);
+	}
+	
+	
+	/**
+	 * Function to set the crystallographic information
+	 */
+	public void setXtalInfo(String spaceGroup, List<Double> unitCell){
 		// Now set the xtalographic information
 		PDBCrystallographicInfo pci = new PDBCrystallographicInfo();
-		SpaceGroup thisSG = SpaceGroup.parseSpaceGroup(spaceGroup);
-		pci.setSpaceGroup(thisSG);
+		SpaceGroup G = SpaceGroup.parseSpaceGroup(spaceGroup);
+		pci.setSpaceGroup(G);
 		if(unitCell.size()==6){
 			CrystalCell cell = new CrystalCell(unitCell.get(0), unitCell.get(1), unitCell.get(2), unitCell.get(3), unitCell.get(4), unitCell.get(5));
 			pci.setCrystalCell(cell);
-			this.structure.setCrystallographicInfo(pci);
+			structure.setCrystallographicInfo(pci);
 		}
 
 	}
+	
+
 }

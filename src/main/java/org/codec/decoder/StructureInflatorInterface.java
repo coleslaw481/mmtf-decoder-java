@@ -1,5 +1,8 @@
 package org.codec.decoder;
 
+import java.util.List;
+import java.util.Map;
+
 
 public interface StructureInflatorInterface {
 
@@ -51,5 +54,31 @@ public interface StructureInflatorInterface {
 	 */
 	void setAtomInfo(String atomName, int serialNumber, char alternativeLocationId, 
 			float x, float y, float z, float occupancy, float temperatureFactor, String element, int charge);
+	
+	
+	/**
+	 * 
+	 * @param keyList
+	 * @param sizeList
+	 * @param inputIds
+	 * @param inputChainIds
+	 * @param inputTransformations
+	 */
+	void setBioAssembly(Map<Integer, Integer> keyList, Map<Integer, Integer> sizeList, Map<Integer, List<String>> inputIds, Map<Integer, List<String>> inputChainIds, Map<Integer, List<double[]>> inputTransformations);
+
+	/**
+	 * 
+	 * @param spaceGroup
+	 * @param unitCell
+	 */
+	void setXtalInfo(String spaceGroup, List<Double> unitCell);
+
+	/**
+	 * Function to set the bond orders
+	 * @param thisBondIndOne
+	 * @param thisBondIndTwo
+	 * @param thisBondOrder
+	 */
+	void setBondOrders(int thisBondIndOne, int thisBondIndTwo, int thisBondOrder);
 	
 }
