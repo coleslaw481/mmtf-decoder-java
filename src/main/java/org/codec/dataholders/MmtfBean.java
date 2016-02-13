@@ -10,9 +10,14 @@ import java.util.Set;
 
 import org.biojava.nbio.structure.quaternary.BioAssemblyInfo;
 
-public class HadoopDataStructDistBean {
+public class MmtfBean {
+	
+	// The version of the format
+	private String mmtfVersion = "0.1";
+	// The producer
+	private String mmtfProducer;
 	// The PDBCode
-	private String pdbCode;
+	private String pdbId;
 	// The title of the structure
 	private String title;
 	// Total data for memory allocation
@@ -61,7 +66,7 @@ public class HadoopDataStructDistBean {
 	// Delta and run length encoded
 	private byte[] groupTypeList;
 	// Delta and run length
-	private byte[]  resNumList;
+	private byte[]  groupNumList;
 	// Delta and run length encoded
 	private byte[] atomIdList; 
 
@@ -79,11 +84,11 @@ public class HadoopDataStructDistBean {
 		this.unitCell = unitCell;
 	}
 
-	public byte[] getResNumList() {
-		return resNumList;
+	public byte[] getGroupNumList() {
+		return groupNumList;
 	}	
-	public void setResNumList(byte[] _atom_site_auth_seq_id) {
-		this.resNumList = _atom_site_auth_seq_id;
+	public void setGroupNumList(byte[] _atom_site_auth_seq_id) {
+		this.groupNumList = _atom_site_auth_seq_id;
 	}
 	public byte[] getxCoordBig() {
 		return xCoordBig;
@@ -215,11 +220,23 @@ public class HadoopDataStructDistBean {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getPdbCode() {
-		return pdbCode;
+	public String getPdbId() {
+		return pdbId;
 	}
-	public void setPdbCode(String pdbCode) {
-		this.pdbCode = pdbCode;
+	public void setPdbId(String pdbCode) {
+		this.pdbId = pdbCode;
+	}
+	public String getMmtfProducer() {
+		return mmtfProducer;
+	}
+	public void setMmtfProducer(String mmtfProducer) {
+		this.mmtfProducer = mmtfProducer;
+	}
+	public String getMmtfVersion() {
+		return mmtfVersion;
+	}
+	public void setMmtfVersion(String mmtfVersion) {
+		this.mmtfVersion = mmtfVersion;
 	}
 
 }

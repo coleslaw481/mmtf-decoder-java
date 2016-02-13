@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.codec.dataholders.BioAssemblyInfoNew;
-import org.codec.dataholders.HadoopDataStructDistBean;
+import org.codec.dataholders.BiologicalAssemblyTransformationNew;
+import org.codec.dataholders.MmtfBean;
+import org.codec.dataholders.MmtfBean;
 import org.codec.dataholders.PDBGroup;
 
 
@@ -40,7 +42,7 @@ public class DecodeStructure {
 		RunLengthDecode intrunlength = new RunLengthDecode();
 		RunLengthDecodeString stringRunlength = new RunLengthDecodeString();		
 		com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper(new MessagePackFactory());
-		HadoopDataStructDistBean xs = objectMapper.readValue(myInBytes, HadoopDataStructDistBean.class);
+		MmtfBean xs = objectMapper.readValue(myInBytes, MmtfBean.class);
 		// GET THE MODEL LIST AND THE CHAIN MAP
 		byte[] chainList = xs.getChainList();
 		int[] chainsPerModel = xs.getChainsPerModel();
@@ -61,7 +63,7 @@ public class DecodeStructure {
 		// Get the insertion code
 		char[] insCode = stringRunlength.deCompressStringArrayToChar((ArrayList<String>) xs.getInsCodeList());
 		// Get the groupNumber
-		int[] groupNum = intrunlength_delta.decompressByteArray(xs.getResNumList());
+		int[] groupNum = intrunlength_delta.decompressByteArray(xs.getGroupNumList());
 		Map<Integer, PDBGroup> groupMap = xs.getGroupMap();
 		int modelCounter = -1;
 		int groupCounter = 0;
@@ -155,6 +157,27 @@ public class DecodeStructure {
 		for(Integer key: bioAss.keySet()){
 			// Get the bioassembly info
 			BioAssemblyInfoNew bioAssOld = bioAss.get(key);
+
+			// 
+			keyList.put(key, bioAssOld.getId());
+			sizeList.put(key, bioAssOld.getMacromolecularSize());
+
+			List<String> idList = new ArrayList<String>();
+			List<String> chainIdList = new ArrayList<String>();
+			List<double[]> transformList = new ArrayList<double[]>();
+			for (BiologicalAssemblyTransformationNew bioTrans: bioAssOld.getTransforms()){
+				double[] trans = bioTrans.getTransformation();
+				String id = bioTrans.getId();
+				for(String chainId: bioTrans.getChainId()){
+					idList.add(id);
+					chainIdList.add(chainId);
+					transformList.add(trans);
+				}
+			}
+			// Now just add these different transforms
+			inputIds.put(key, idList);
+			inputChainIds.put(key, chainIdList);
+			inputTransformations.put(key, transformList);
 		}
 		// Set the bioassembly information
 		structInflator.setBioAssembly(keyList, sizeList,  inputIds, inputChainIds, inputTransformations);

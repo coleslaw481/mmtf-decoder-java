@@ -35,7 +35,7 @@ public class BiologicalAssemblyTransformationNew implements Cloneable, Serializa
 
 
 	private String id;
-	private String chainId;	
+	private List<String> chainId = new ArrayList<String>();	
 	private double[] transformation;
 	public String getId() {
 		return id;
@@ -43,17 +43,18 @@ public class BiologicalAssemblyTransformationNew implements Cloneable, Serializa
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getChainId() {
-		return chainId;
-	}
-	public void setChainId(String chainId) {
-		this.chainId = chainId;
-	}
+
 	public double[] getTransformation() {
 		return transformation;
 	}
 	public void setTransformation(double[] transformation) {
 		this.transformation = transformation;
+	}
+	public List<String> getChainId() {
+		return chainId;
+	}
+	public void setChainId(List<String> chainId) {
+		this.chainId = chainId;
 	}
 
 
