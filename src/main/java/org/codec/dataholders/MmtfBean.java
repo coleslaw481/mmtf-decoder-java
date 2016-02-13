@@ -16,6 +16,8 @@ public class MmtfBean {
 	private String mmtfVersion = "0.1";
 	// The producer
 	private String mmtfProducer;
+	// The number of bonds
+	private int numBonds;
 	// The PDBCode
 	private String pdbId;
 	// The title of the structure
@@ -237,6 +239,12 @@ public class MmtfBean {
 	}
 	public void setMmtfVersion(String mmtfVersion) {
 		this.mmtfVersion = mmtfVersion;
+	}
+	public int getNumBonds() {
+		return numBonds;
+	}
+	public void setNumBonds(int numBonds) {
+		this.numBonds = numBonds;
 	}
 
 }
