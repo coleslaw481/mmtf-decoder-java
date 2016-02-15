@@ -11,7 +11,6 @@ import org.biojava.nbio.structure.AminoAcid;
 import org.biojava.nbio.structure.AminoAcidImpl;
 import org.biojava.nbio.structure.Atom;
 import org.biojava.nbio.structure.AtomImpl;
-import org.biojava.nbio.structure.Bond;
 import org.biojava.nbio.structure.BondImpl;
 import org.biojava.nbio.structure.Chain;
 import org.biojava.nbio.structure.ChainImpl;
@@ -34,7 +33,6 @@ import org.biojava.nbio.structure.xtal.SpaceGroup;
 
 public class BioJavaStructureInflator implements StructureInflatorInterface {
 	private Structure structure;
-	private int modelCount = 0;
 	private int modelNumber = 0;
 	private int atomCount = 1;
 	private Chain chain;
@@ -55,7 +53,6 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	 */
 	public void setModelCount(int inputModelCount) {
 		atomCount = 1;
-		modelCount = inputModelCount;
 	}
 
 	public void setModelInfo(int inputModelNumber, int chainCount) {
@@ -134,7 +131,8 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		Atom atomOne = group.getAtom(indOne);
 		Atom atomTwo = group.getAtom(indTwo);
 		// set the new bond
-		Bond newBond = new BondImpl(atomOne, atomTwo, bondOrder);
+		@SuppressWarnings("unused")
+		BondImpl bond = new BondImpl(atomOne, atomTwo, bondOrder);
 		
 	}
 	

@@ -11,7 +11,6 @@ import java.util.Map;
 import org.codec.dataholders.BioAssemblyInfoNew;
 import org.codec.dataholders.BiologicalAssemblyTransformationNew;
 import org.codec.dataholders.MmtfBean;
-import org.codec.dataholders.MmtfBean;
 import org.codec.dataholders.PDBGroup;
 
 

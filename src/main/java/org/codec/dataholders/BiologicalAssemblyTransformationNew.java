@@ -1,20 +1,8 @@
 package org.codec.dataholders;
 
 
-import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.biojava.nbio.structure.xtal.CrystalTransform;
-import org.biojava.nbio.core.util.PrettyXMLWriter;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import javax.vecmath.Point3d;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +22,10 @@ import java.util.List;
 public class BiologicalAssemblyTransformationNew implements Cloneable, Serializable {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8109941242652091495L;
 	private String id;
 	private List<String> chainId = new ArrayList<String>();	
 	private double[] transformation;

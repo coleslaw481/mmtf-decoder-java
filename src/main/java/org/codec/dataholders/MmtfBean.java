@@ -1,14 +1,9 @@
 package org.codec.dataholders;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.biojava.nbio.structure.quaternary.BioAssemblyInfo;
 
 public class MmtfBean {
 	
@@ -37,8 +32,8 @@ public class MmtfBean {
 	// A map of Bioassembly -> new class so serializable
 	private Map<Integer, BioAssemblyInfoNew> bioAssembly = new HashMap<Integer, BioAssemblyInfoNew>(); 
 //	// The bond indices and order -> NOT FOR NOW
-//	private List<Integer> interGroupBondInds = new ArrayList<Integer>();
-//	private List<Integer> interGroupBondOrders = new ArrayList<Integer>();
+	private byte[] bondAtomList;
+	private byte[] bondOrderList;
 	// Map of all the data
 	private  Map<Integer, PDBGroup> groupMap = new HashMap<Integer, PDBGroup>();
 	
@@ -245,6 +240,18 @@ public class MmtfBean {
 	}
 	public void setNumBonds(int numBonds) {
 		this.numBonds = numBonds;
+	}
+	public byte[] getBondAtomList() {
+		return bondAtomList;
+	}
+	public void setBondAtomList(byte[] bondAtomList) {
+		this.bondAtomList = bondAtomList;
+	}
+	public byte[] getBondOrderList() {
+		return bondOrderList;
+	}
+	public void setBondOrderList(byte[] bondOrderList) {
+		this.bondOrderList = bondOrderList;
 	}
 
 }
