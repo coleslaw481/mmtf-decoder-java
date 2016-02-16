@@ -35,10 +35,10 @@ public class PDBGroup implements Serializable {
 		this.bondIndices = bondIndices;
 	}
 	public String getResName() {
-		return resName;
+		return groupName;
 	}
 	public void setResName(String resName) {
-		this.resName = resName;
+		this.groupName = resName;
 	}
 	public boolean isHetFlag() {
 		return hetFlag;
@@ -55,7 +55,7 @@ public class PDBGroup implements Serializable {
 	}
 	
 	// The name of the group (e.g. HIS)
-	private String resName = new String();
+	private String groupName = new String();
 	// Whether the group is a HETATM record or not
 	private boolean hetFlag = false;
 	// A list of strings indicating the atominfo (Atom name and element name
