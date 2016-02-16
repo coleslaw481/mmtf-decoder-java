@@ -13,7 +13,6 @@ import org.codec.dataholders.BiologicalAssemblyTransformationNew;
 import org.codec.dataholders.MmtfBean;
 import org.codec.dataholders.PDBGroup;
 
-
 import org.codec.arraydecompressors.DeltaDeCompress;
 import org.codec.arraydecompressors.RunLengthDecode;
 import org.codec.arraydecompressors.RunLengthDelta;
@@ -182,6 +181,12 @@ public class DecodeStructure {
 		structInflator.setBioAssembly(keyList, sizeList,  inputIds, inputChainIds, inputTransformations);
 	}
 
+	/**
+	 * Function to convert a byte array to an int array
+	 * @param inArray
+	 * @return
+	 * @throws IOException
+	 */
 	private int[] bytesToInts(byte[] inArray) throws IOException {
 		// TODO Auto-generated method stub
 		DataInputStream bis = new DataInputStream(new ByteArrayInputStream(inArray));

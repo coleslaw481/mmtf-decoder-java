@@ -16,7 +16,6 @@ public class DeltaDeCompress {
 		int totNum = 0;
 		// Loop through these and take every other int
 		for(int i=0; i<bigNums.length/8;i++){
-
 			int bigNum =  bigStream.readInt();
 			int counterNum =  bigStream.readInt();
 			// Now writ thei sout
@@ -25,7 +24,6 @@ public class DeltaDeCompress {
 			totNum += counterNum;
 			bigInts[i] = bigNum;
 			counterInts[i] = counterNum;
-
 		}
 		// Now loop over the total number of ints
 		int[] outArr = new int[totNum];
@@ -38,7 +36,7 @@ public class DeltaDeCompress {
 			// Now loop through this
 			for(int j=0; j<counterInts[i]; j++){
 				// Now add this as a short
-				outArr[totCounter] = (int) smallStream.readShort();
+				outArr[totCounter] = outArr[totCounter-1] + (int) smallStream.readShort();
 				totCounter++;
 
 			}
