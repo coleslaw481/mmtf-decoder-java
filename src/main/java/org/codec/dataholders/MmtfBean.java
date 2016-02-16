@@ -28,15 +28,14 @@ public class MmtfBean {
 	// String for the space group
 	private String spaceGroup;
 	// The unit cell information
-	private List<Double> unitCell = new ArrayList<Double>(); 
+	private List<Float> unitCell = new ArrayList<Float>(); 
 	// A map of Bioassembly -> new class so serializable
 	private Map<Integer, BioAssemblyInfoNew> bioAssembly = new HashMap<Integer, BioAssemblyInfoNew>(); 
-//	// The bond indices and order -> NOT FOR NOW
+	// The bond indices and order 
 	private byte[] bondAtomList;
 	private byte[] bondOrderList;
 	// Map of all the data
 	private  Map<Integer, PDBGroup> groupMap = new HashMap<Integer, PDBGroup>();
-	
 	// For the big arrays split into two -> one of 32 bit ints, one of 16
 	private byte[] xCoordBig;
 	private byte[] yCoordBig;
@@ -47,19 +46,14 @@ public class MmtfBean {
 	private byte[] yCoordSmall;
 	private byte[] zCoordSmall;
 	private byte[] bFactorSmall;
-	
-	
 	// The secondary structure -> stored as 8 bit ints
 	private byte[] secStructList;
-	
 	// Run length encoded 
 	private byte[] occList;
 	// Run length encoded
 	private List<String> altLabelList= new ArrayList<String>();
 	// Run length encoded
 	private List<String> insCodeList = new ArrayList<String>();
-	
-	
 	// Delta and run length encoded
 	private byte[] groupTypeList;
 	// Delta and run length
@@ -68,16 +62,17 @@ public class MmtfBean {
 	private byte[] atomIdList; 
 
 
+	
 	public String getSpaceGroup() {
 		return spaceGroup;
 	}
 	public void setSpaceGroup(String spaceGroup) {
 		this.spaceGroup = spaceGroup;
 	}
-	public List<Double> getUnitCell() {
+	public List<Float> getUnitCell() {
 		return unitCell;
 	}
-	public void setUnitCell(List<Double> unitCell) {
+	public void setUnitCell(List<Float> unitCell) {
 		this.unitCell = unitCell;
 	}
 

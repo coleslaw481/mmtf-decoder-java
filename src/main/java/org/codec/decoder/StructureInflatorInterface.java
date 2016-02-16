@@ -69,9 +69,9 @@ public interface StructureInflatorInterface {
 	/**
 	 * 
 	 * @param spaceGroup
-	 * @param unitCell
+	 * @param list
 	 */
-	void setXtalInfo(String spaceGroup, List<Double> unitCell);
+	void setXtalInfo(String spaceGroup, List<Float> list);
 
 	/**
 	 * Function to set the bond orders

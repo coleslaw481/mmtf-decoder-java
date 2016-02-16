@@ -176,7 +176,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	/**
 	 * Function to set the crystallographic information
 	 */
-	public void setXtalInfo(String spaceGroup, List<Double> unitCell){
+	public void setXtalInfo(String spaceGroup, List<Float> unitCell){
 		// Now set the xtalographic information
 		PDBCrystallographicInfo pci = new PDBCrystallographicInfo();
 		SpaceGroup G = SpaceGroup.parseSpaceGroup(spaceGroup);
