@@ -99,7 +99,7 @@ public class DecodeStructure {
 					PDBGroup thisGroup = groupMap.get(g);
 					List<String> atomInfo = thisGroup.getAtomInfo();
 					int atomCount = atomInfo.size()/2;
-					int thsG = groupNum[lastCount];
+					int thsG = groupNum[thisGroupNum];
 					char thsIns = insCode[lastCount];
 					///// NEEDS FIXING FOR NUCLEIC ACIDS... CURRENTLY JUST CONSIDERS AMINO ACIDS AND HET ATOMS
 					/////// OK SO NOW WE NEED A FLAG TO FIND NUCLEIC ACIDS

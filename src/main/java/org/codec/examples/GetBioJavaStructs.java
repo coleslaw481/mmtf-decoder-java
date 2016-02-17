@@ -19,7 +19,7 @@ public class GetBioJavaStructs {
 	// The base URL used to get data
 	private String baseUrl = "http://132.249.213.68:8080/servemessagepack/";
 
-	
+
 	/**
 	 * 
 	 * @param inputCode
@@ -37,7 +37,7 @@ public class GetBioJavaStructs {
 		ds.getStructFromByteArray(b, bjs);
 		return bjs.getStructure();
 	}
-	
+
 	/**
 	 * Function to get a file from the file system
 	 * @param basePath
@@ -46,16 +46,27 @@ public class GetBioJavaStructs {
 	 * @throws IOException
 	 */
 	public Structure getFromFileSystem(String basePath, String pdbCode) throws FileNotFoundException, IOException{
+		// Now return this
+		return getFromFileSystem(basePath+"/"+pdbCode.substring(1, 3)+"/"+pdbCode);
+	}
+
+
+	/**
+	 * Function to get a file from the file system - full path supplied
+	 * @param basePath
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public Structure getFromFileSystem(String fullPath) throws FileNotFoundException, IOException{
 		DecodeStructure ds = new DecodeStructure();
 		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
 		// Get these as an inputstream
-		byte[] b = deflateGzip(IOUtils.toByteArray(new FileInputStream(new File(basePath+"/"+pdbCode.substring(1, 3)+"/"+pdbCode))));
+		byte[] b = deflateGzip(IOUtils.toByteArray(new FileInputStream(new File(fullPath))));
 		// Now get the actual structure
 		ds.getStructFromByteArray(b, bjs);
 		return bjs.getStructure();
 	}
-	
-
 
 	/**
 	 * 

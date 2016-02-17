@@ -28,7 +28,6 @@ public class RunLengthDelta {
 			numArr[i] = getNum;
 			// Fill the count array
 			countArr[i] = getCount;
-
 		}
 		// Now set this output array
 		int[] outArr = new int[totCount];
