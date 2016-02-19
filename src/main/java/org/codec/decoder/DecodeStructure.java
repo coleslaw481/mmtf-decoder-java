@@ -103,12 +103,12 @@ public class DecodeStructure {
 					char thsIns = insCode[lastCount];
 					///// NEEDS FIXING FOR NUCLEIC ACIDS... CURRENTLY JUST CONSIDERS AMINO ACIDS AND HET ATOMS
 					/////// OK SO NOW WE NEED A FLAG TO FIND NUCLEIC ACIDS
-					if(nucAcidList.contains(thisGroup.getResName())){
+					if(nucAcidList.contains(thisGroup.getGroupName())){
 						// Now set this as 
-						structInflator.setGroupInfo(thisGroup.getResName(), thsG, thsIns, 2, atomCount);
+						structInflator.setGroupInfo(thisGroup.getGroupName(), thsG, thsIns, 2, atomCount);
 					}
 					else{
-						structInflator.setGroupInfo(thisGroup.getResName(), thsG, thsIns, (thisGroup.isHetFlag()) ? 0 : 1, atomCount);
+						structInflator.setGroupInfo(thisGroup.getGroupName(), thsG, thsIns, (thisGroup.isHetFlag()) ? 0 : 1, atomCount);
 					}
 					// A counter for the atom information
 					int atomCounter = 0;
