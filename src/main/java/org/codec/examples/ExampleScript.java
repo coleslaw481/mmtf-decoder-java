@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.biojava.nbio.structure.Structure;
-import org.codec.decoder.DecodeStructure;
 
 public class ExampleScript {
 
@@ -14,8 +13,6 @@ public class ExampleScript {
 		GetBioJavaStructs gbjs = new GetBioJavaStructs();
 		Structure thisStruct = gbjs.getFromFileSystem("/Users/anthony/codec-devel/data/structures", "4cup");
 		Structure thatStruct = gbjs.getFromUrl("4cup");
-		
-
 	}
 
 }
