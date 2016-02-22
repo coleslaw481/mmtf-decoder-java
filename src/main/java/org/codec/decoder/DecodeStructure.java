@@ -74,7 +74,6 @@ public class DecodeStructure {
 				// Get the bytes for the  chain 
 				// Get a stringbuilder
 				StringBuilder sb = new StringBuilder();
-				System.out.println(chainList.length);
 				byte chainIdOne = chainList[thisChain*4+0];
 				sb.append((char) chainIdOne);
 				byte chainIdTwo = chainList[thisChain*4+1];

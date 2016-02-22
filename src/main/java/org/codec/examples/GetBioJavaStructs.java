@@ -30,7 +30,6 @@ public class GetBioJavaStructs {
 	public Structure getFromUrl(String inputCode) throws MalformedURLException, IOException{
 		DecodeStructure ds = new DecodeStructure();
 		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
-
 		// Get these as an inputstream
 		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream()); 
 		// Now get the actual structure
