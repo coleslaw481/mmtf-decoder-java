@@ -34,12 +34,11 @@ import org.biojava.nbio.structure.xtal.SpaceGroup;
 public class BioJavaStructureInflator implements StructureInflatorInterface {
 	private Structure structure;
 	private int modelNumber = 0;
-	private int atomCount = 1;
 	private Chain chain;
 	private Group group;
 	private ChemComp cc = new ChemComp();
 
-	
+
 	public BioJavaStructureInflator() {
 		structure = new StructureImpl();
 	}
@@ -52,13 +51,11 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	 * In biojava this function does nothing
 	 */
 	public void setModelCount(int inputModelCount) {
-		atomCount = 1;
 	}
 
 	public void setModelInfo(int inputModelNumber, int chainCount) {
 		//		System.out.println("modelNumber: " + modelNumber + " chainCount: " + chainCount);
 		modelNumber = inputModelNumber;
-		atomCount = 1;
 		structure.addModel(new ArrayList<Chain>(chainCount));
 	}
 
@@ -88,7 +85,12 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		// Set the CC -> empty but not null
 		group.setChemComp(cc);
 		group.setPDBName(groupName);
-		group.setResidueNumber(chain.getChainID().trim(), groupNumber, insertionCode);
+		if(insertionCode=='?'){
+			group.setResidueNumber(chain.getChainID().trim(), groupNumber, null);
+		}
+		else{
+			group.setResidueNumber(chain.getChainID().trim(), groupNumber, insertionCode);
+			}
 		group.setAtoms(new ArrayList<Atom>(atomCount));
 		//	System.out.println("getting group: " + group);
 		if (polymerType != 0) {
@@ -105,18 +107,21 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 			float y, float z, float occupancy, float temperatureFactor,
 			String element, int charge) {
 		Atom atom = new AtomImpl();	
-		atom.setPDBserial(atomCount++);
-		//		System.out.println("BioJavaStructureInflator: " + atomCount);
+		atom.setPDBserial(serialNumber);
 		atom.setName(atomName.trim());
 		atom.setElement(Element.valueOfIgnoreCase(element));
-		atom.setAltLoc(alternativeLocationId);
+		if(alternativeLocationId!='?'){
+			atom.setAltLoc(alternativeLocationId);
+		}
+		else{
+			atom.setAltLoc(new Character(' '));
+		}
 		atom.setX(x);
 		atom.setY(y);
 		atom.setZ(z);
 		atom.setOccupancy(occupancy);
 		atom.setTempFactor(temperatureFactor);
 		atom.setCharge((short) charge);
-		//		System.out.println(atom);
 		group.addAtom(atom);
 	}
 
@@ -133,9 +138,9 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		// set the new bond
 		@SuppressWarnings("unused")
 		BondImpl bond = new BondImpl(atomOne, atomTwo, bondOrder);
-		
+
 	}
-	
+
 	/**
 	 * Function to set the bioassmebly info
 	 * @param inputAssembly
@@ -171,8 +176,8 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		pdbHeader.setBioAssemblies(bioAssemblies);
 		structure.setPDBHeader(pdbHeader);
 	}
-	
-	
+
+
 	/**
 	 * Function to set the crystallographic information
 	 */
@@ -188,6 +193,6 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		}
 
 	}
-	
+
 
 }

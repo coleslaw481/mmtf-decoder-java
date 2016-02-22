@@ -74,20 +74,21 @@ public class DecodeStructure {
 				// Get the bytes for the  chain 
 				// Get a stringbuilder
 				StringBuilder sb = new StringBuilder();
+				System.out.println(chainList.length);
 				byte chainIdOne = chainList[thisChain*4+0];
-				sb.append(chainIdOne);
+				sb.append((char) chainIdOne);
 				byte chainIdTwo = chainList[thisChain*4+1];
 				if(chainIdTwo!=(byte) 0){
-					sb.append(chainIdTwo);
+					sb.append((char) chainIdTwo);
 				}
 				byte chainIdThree = chainList[thisChain*4+2];
 				if(chainIdThree!=(byte) 0){
-					sb.append(chainIdThree);
+					sb.append((char) chainIdThree);
 				}
 				byte chainIdFour = chainList[thisChain*4+3];
 				if(chainIdFour!=(byte) 0){
-					sb.append(chainIdFour);
-				}				
+					sb.append((char) chainIdFour);
+				}
 				int groupsThisChain = groupsPerChain[thisChain];
 				structInflator.setChainInfo(sb.toString(), groupsThisChain);
 				int nextInd = groupCounter+groupsThisChain;
