@@ -31,14 +31,18 @@ public class DeltaDeCompress {
 		for(int i=0; i<bigInts.length; i++)
 		{	
 			// Now add this to the out array
+			if(i==0){
 			outArr[totCounter] = bigInts[i];
+			}
+			else{
+				outArr[totCounter] = outArr[totCounter-1] + bigInts[i];
+			}
 			totCounter++;
 			// Now loop through this
 			for(int j=0; j<counterInts[i]; j++){
 				// Now add this as a short
 				outArr[totCounter] = outArr[totCounter-1] + (int) smallStream.readShort();
 				totCounter++;
-
 			}
 		}
 		return outArr;
