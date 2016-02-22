@@ -33,7 +33,7 @@ public class GetBioJavaStructs {
 		// Get these as an inputstream
 		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream()); 
 		// Now get the actual structure
-		ds.getStructFromByteArray(b, bjs);
+		ds.getStructFromByteArray(deflateGzip(b), bjs);
 		return bjs.getStructure();
 	}
 
