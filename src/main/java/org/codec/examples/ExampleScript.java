@@ -13,6 +13,10 @@ public class ExampleScript {
 		GetBioJavaStructs gbjs = new GetBioJavaStructs();
 		Structure thisStruct = gbjs.getFromFileSystem("/Users/anthony/codec-devel/data/structures", "4cup");
 		Structure thatStruct = gbjs.getFromUrl("4cup");
+		
+		System.out.println(thisStruct.getChains());
+		System.out.println(thatStruct.getChains());
+
 	}
 
 }
