@@ -135,7 +135,7 @@ public class DecodeStructure {
 					for(int thisBond=0; thisBond<bondOrders.size();thisBond++){
 						int thisBondOrder = bondOrders.get(thisBond);
 						int thisBondIndOne = bondInds.get(thisBond*2);
-						int thisBondIndTwo = bondInds.get(thisBond*2+1);
+						int thisBondIndTwo = bondInds.get(thisBond*2+1);;
 						structInflator.setBondOrders(thisBondIndOne, thisBondIndTwo, thisBondOrder);
 					}
 				}

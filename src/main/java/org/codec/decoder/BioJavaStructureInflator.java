@@ -90,7 +90,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		}
 		else{
 			group.setResidueNumber(chain.getChainID().trim(), groupNumber, insertionCode);
-			}
+		}
 		group.setAtoms(new ArrayList<Atom>(atomCount));
 		//	System.out.println("getting group: " + group);
 		if (polymerType != 0) {
@@ -107,10 +107,13 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 			float y, float z, float occupancy, float temperatureFactor,
 			String element, int charge) {
 		Atom atom = new AtomImpl();	
+		Group altGroup = null;
 		atom.setPDBserial(serialNumber);
 		atom.setName(atomName.trim());
 		atom.setElement(Element.valueOfIgnoreCase(element));
 		if(alternativeLocationId!='?'){
+			// Get the altGroup
+			altGroup = getCorrectAltLocGroup(alternativeLocationId);
 			atom.setAltLoc(alternativeLocationId);
 		}
 		else{
@@ -122,7 +125,17 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		atom.setOccupancy(occupancy);
 		atom.setTempFactor(temperatureFactor);
 		atom.setCharge((short) charge);
-		group.addAtom(atom);
+		if(altGroup==null){
+			group.addAtom(atom);
+		}
+		else{
+			altGroup.setChain(chain);
+			altGroup.addAtom(atom);
+		}
+		
+		if ( ! group.hasAtom(atom.getName())) {
+			group.addAtom(atom);
+		}
 	}
 
 	/**
@@ -141,6 +154,54 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 
 	}
 
+
+	/**
+	 * Copied from BioJava
+	 * @param altLoc
+	 * @param recordName
+	 * @param aminoCode1
+	 * @param groupCode3
+	 * @param seq_id
+	 * @return
+	 */
+	private Group getCorrectAltLocGroup( Character altLoc) {
+
+		// see if we know this altLoc already;
+		List<Atom> atoms = group.getAtoms();
+		if ( atoms.size() > 0) {
+			Atom a1 = atoms.get(0);
+			// we are just adding atoms to the current group
+			// probably there is a second group following later...
+			if (a1.getAltLoc().equals(altLoc)) {
+				return group;
+			}
+		}
+
+		// Get the altLovGroup
+		Group altLocgroup = group.getAltLocGroup(altLoc);
+		if(altLocgroup==null){
+			
+		}
+		else{
+			return altLocgroup;
+		}
+		// no matching altLoc group found.
+		// build it up.
+
+		if ( group.getAtoms().size() == 0) {
+			//System.out.println("current group is empty " + current_group + " " + altLoc);
+			return group;
+		}
+		//System.out.println("cloning current group " + current_group + " " + current_group.getAtoms().get(0).getAltLoc() + " altLoc " + altLoc);
+		Group altLocG = (Group) group.clone();
+		// drop atoms from cloned group...
+		// https://redmine.open-bio.org/issues/3307
+		altLocG.setAtoms(new ArrayList<Atom>());
+		altLocG.getAltLocs().clear();
+		group.addAltLoc(altLocG);
+		return altLocG;	
+
+	}
 	/**
 	 * Function to set the bioassmebly info
 	 * @param inputAssembly
