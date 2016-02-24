@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.biojava.nbio.structure.Structure;
 import org.codec.decoder.BioJavaStructureInflator;
@@ -28,13 +29,62 @@ public class GetBioJavaStructs {
 	 * @throws IOException
 	 */
 	public Structure getFromUrl(String inputCode) throws MalformedURLException, IOException{
+		// First try to get it from a local file
+		String basePath = System.getProperty("PDB_CACHE_DIR");
+		if(basePath==null){
+			System.out.println("PDB_CACHE_DIR not available");
+			basePath = System.getProperty("PDB_DIR");
+		}
+		boolean isFile = getFile(basePath, inputCode);
+		if(isFile==true){
+			getFromFileSystem(basePath, inputCode);
+		}
+		else{
+			
+		}
+		
 		DecodeStructure ds = new DecodeStructure();
 		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
 		// Get these as an inputstream
-		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream()); 
+		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream());
+		// Cache this
+		cacheFile(b, basePath, inputCode);
 		// Now get the actual structure
 		ds.getStructFromByteArray(deflateGzip(b), bjs);
 		return bjs.getStructure();
+	}
+
+	private boolean getFile(String basePath, String pdbId) throws FileNotFoundException, IOException {
+		// 
+		if(basePath==null){
+			return false;
+		}
+		else{
+			String totPath = basePath+"/data/structures/divided/msgpack/"+pdbId.substring(1,3)+"/"+pdbId+".mmtf";
+			File thisFile = new File(totPath);
+			if(thisFile.exists()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
+		
+	}
+
+	private void cacheFile(byte[] b, String basePath, String pdbId) throws IOException {
+		// Set the path for the file
+		if(basePath==null){
+			System.out.println("Not caching - PDB_DIR and PDB_CACHE_DIR not specified");
+			return;
+		}
+		String dirPath = basePath+"/data/structures/divided/msgpack/"+pdbId.substring(1,3)+"/";
+		String filePath = dirPath+pdbId+".mmtf";
+
+		File thisFile = new File(dirPath);
+		thisFile.mkdirs();
+		FileUtils.writeByteArrayToFile(new File(filePath), b);
 	}
 
 	/**
@@ -46,7 +96,8 @@ public class GetBioJavaStructs {
 	 */
 	public Structure getFromFileSystem(String basePath, String pdbCode) throws FileNotFoundException, IOException{
 		// Now return this
-		return getFromFileSystem(basePath+"/"+pdbCode.substring(1, 3)+"/"+pdbCode);
+		System.out.println("GETTING FROM FILE SYSTEM");
+		return getFromFileSystem(basePath+"/data/structures/divided/msgpack"+"/"+pdbCode.substring(1, 3)+"/"+pdbCode+".mmtf");
 	}
 
 

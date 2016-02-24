@@ -252,7 +252,6 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 			pci.setCrystalCell(cell);
 			structure.setCrystallographicInfo(pci);
 		}
-
 	}
 
 

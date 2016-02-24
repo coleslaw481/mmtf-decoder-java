@@ -8,13 +8,12 @@ import org.biojava.nbio.structure.Structure;
 public class ExampleScript {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		// Get the class to get biojavastructs
-		
+		// Set the PDB_CACHE_DIR path 
+		System.setProperty("PDB_CACHE_DIR","/Users/anthony/PDB_CACHE");
+
 		GetBioJavaStructs gbjs = new GetBioJavaStructs();
-		Structure thisStruct = gbjs.getFromFileSystem("/Users/anthony/codec-devel/data/structures", "4cup");
 		Structure thatStruct = gbjs.getFromUrl("4cup");
 		
-		System.out.println(thisStruct.getChains());
 		System.out.println(thatStruct.getChains());
 
 	}
