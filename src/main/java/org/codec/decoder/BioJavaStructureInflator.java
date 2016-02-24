@@ -30,7 +30,11 @@ import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.biojava.nbio.structure.xtal.SpaceGroup;
 
 
-
+/**
+ * A biojava specific structure inflator for MMTF -> Should be ported to biojava code
+ * @author anthony
+ *
+ */
 public class BioJavaStructureInflator implements StructureInflatorInterface {
 	private Structure structure;
 	private int modelNumber = 0;

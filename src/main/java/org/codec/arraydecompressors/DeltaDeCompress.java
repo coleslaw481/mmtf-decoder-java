@@ -6,6 +6,13 @@ import java.io.IOException;
 
 public class DeltaDeCompress {
 
+	/**
+	 * Function to decompress two byte arrays - one containing 4 byte and one 2 byte ints
+	 * @param bigNums
+	 * @param smallNums
+	 * @return
+	 * @throws IOException
+	 */
 	public int[] decompressByteArray(byte[] bigNums, byte[] smallNums) throws IOException
 	{
 		// Get these data streams

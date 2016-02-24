@@ -9,12 +9,17 @@ import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Tests for the array decompressor library 
+ * @author anthony
+ *
+ */
 public class ArrayDecompressorTests {
 
 	@Test
 	public void runLenghtDecodeIntTest(){
 
-		RunLengthDecode rlds = new RunLengthDecode();
+		RunLengthDecodeInt rlds = new RunLengthDecodeInt();
 		// Set the size and character
 		int numInts = 100;
 		int intRep = 1000;

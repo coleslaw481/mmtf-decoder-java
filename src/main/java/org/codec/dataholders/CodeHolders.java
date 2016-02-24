@@ -4,6 +4,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A class to store the encoding of secondary structure types
+ * @author anthony
+ *
+ */
 public class CodeHolders {
 
 	// A map to indicate secondary structure information

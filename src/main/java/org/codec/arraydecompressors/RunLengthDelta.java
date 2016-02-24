@@ -6,8 +6,13 @@ import java.io.IOException;
 
 public class RunLengthDelta {
 
+	/**
+	 * Function to decompress a byte array to an int array
+	 * @param inArray
+	 * @return
+	 * @throws IOException
+	 */
 	public int[] decompressByteArray(byte[] inArray) throws IOException {
-
 		// Array to store all the different numbers
 		int[] numArr = new int[inArray.length/8];
 		int[] countArr = new int[inArray.length/8];

@@ -1,11 +1,13 @@
 package org.codec.arraydecompressors;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RunLengthDecodeString implements StringArrayDeCompressor {
 
-	public ArrayList<String> deCompressStringArray(ArrayList<String> inArray) {
-		ArrayList<String> outArray =  new ArrayList<String>();
+	public List<String> deCompressStringArray(List<String> inArray) {
+		// Make the output array
+		List<String> outArray =  new ArrayList<String>();
 		for (int i=0; i<inArray.size(); i+=2){
 			String outString = inArray.get(i);
 			int numString = Integer.parseInt(inArray.get(i+1));
@@ -17,6 +19,11 @@ public class RunLengthDecodeString implements StringArrayDeCompressor {
 		return outArray;
 	}
 
+	/**
+	 * Function to return a char array rather than a string array
+	 * @param inArray
+	 * @return
+	 */
 	public char[] deCompressStringArrayToChar(ArrayList<String> inArray) {
 		int totNum = 0;
 		// Define an array to hold chars

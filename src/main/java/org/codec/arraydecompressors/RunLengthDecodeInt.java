@@ -4,11 +4,14 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class RunLengthDecode implements IntArrayDeCompressor{
-	public ArrayList<Integer> decompressIntArray(ArrayList<Integer> inArray) {
-		// TODO Auto-generated method stub
-		ArrayList<Integer> outArray =  new ArrayList<Integer>();
+public class RunLengthDecodeInt implements IntArrayDeCompressor{
+	
+	
+	public List<Integer> decompressIntArray(List<Integer> inArray) {
+		// Make the output array
+		List<Integer> outArray =  new ArrayList<Integer>();
 		// Loop through the vals
 		for (int i = 0; i < inArray.size(); i+=2) {
 			// Get the value out here
@@ -22,7 +25,12 @@ public class RunLengthDecode implements IntArrayDeCompressor{
 		return outArray;
 	}
 
-
+	/**
+	 * Function to decompress a byte array that is run length encoded
+	 * @param inArray
+	 * @return
+	 * @throws IOException
+	 */
 	public int[] decompressByteArray(byte[] inArray) throws IOException {
 
 		// Array to store all the different numbers

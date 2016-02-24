@@ -14,12 +14,17 @@ import org.codec.dataholders.MmtfBean;
 import org.codec.dataholders.PDBGroup;
 
 import org.codec.arraydecompressors.DeltaDeCompress;
-import org.codec.arraydecompressors.RunLengthDecode;
+import org.codec.arraydecompressors.RunLengthDecodeInt;
 import org.codec.arraydecompressors.RunLengthDelta;
 import org.codec.arraydecompressors.RunLengthDecodeString;
 
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 
+/**
+ * Class to actually decode an MMTF using a specific structure inflator
+ * @author anthony
+ *
+ */
 public class DecodeStructure {
 
 	/**
@@ -37,7 +42,7 @@ public class DecodeStructure {
 		// Get the decompression
 		DeltaDeCompress delta = new DeltaDeCompress();
 		RunLengthDelta intrunlength_delta = new RunLengthDelta();
-		RunLengthDecode intrunlength = new RunLengthDecode();
+		RunLengthDecodeInt intrunlength = new RunLengthDecodeInt();
 		RunLengthDecodeString stringRunlength = new RunLengthDecodeString();		
 		com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper(new MessagePackFactory());
 		MmtfBean xs = objectMapper.readValue(myInBytes, MmtfBean.class);

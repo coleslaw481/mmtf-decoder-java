@@ -16,6 +16,11 @@ import org.biojava.nbio.structure.Structure;
 import org.codec.decoder.BioJavaStructureInflator;
 import org.codec.decoder.DecodeStructure;
 
+/**
+ * Some helper functions and utilit functions to get structures from BioJava - really just for canary release and testing
+ * @author anthony
+ *
+ */
 public class GetBioJavaStructs {
 	// The base URL used to get data
 	private String baseUrl = "http://132.249.213.68:8080/servemessagepack/";

@@ -13,10 +13,12 @@ import java.util.List;
  * transformation (rotation+translation) and the chain identifier to 
  * which it should be applied.
  * 
+ * Modified for message pack
  * @author Peter Rose
  * @author Andreas Prlic
  * @author rickb
  * @author duarte_j
+ * @author anthony
  * @see CrystalTransform
  */
 public class BiologicalAssemblyTransformationNew implements Cloneable, Serializable {

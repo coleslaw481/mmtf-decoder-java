@@ -30,7 +30,10 @@ import java.util.List;
  * Note that the PDB allows for 1 or more Biological Assemblies for a given entry. They
  * are identified by the id field.
  * 
+ * Modifeid for message pack
+ * 
  * @author duarte_j
+ * @author anthony
  */
 public class BioAssemblyInfoNew {
 	

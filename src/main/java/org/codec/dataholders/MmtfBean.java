@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class to store the data sent in an MMTF data source
+ * @author anthony
+ *
+ */
 public class MmtfBean {
 	
 	// The version of the format

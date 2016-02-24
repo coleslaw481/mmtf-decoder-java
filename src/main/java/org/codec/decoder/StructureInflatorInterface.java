@@ -3,7 +3,11 @@ package org.codec.decoder;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Interface to inflate a given mmtf data source
+ * @author anthony
+ *
+ */
 public interface StructureInflatorInterface {
 
 	/**
