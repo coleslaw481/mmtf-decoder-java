@@ -54,7 +54,7 @@ public class GetBioJavaStructs {
 		return bjs.getStructure();
 	}
 
-	private boolean getFile(String basePath, String pdbId) throws FileNotFoundException, IOException {
+	private boolean getFile(String basePath, String pdbId) {
 		// 
 		if(basePath==null){
 			return false;
