@@ -36,6 +36,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	private int modelNumber = 0;
 	private Chain chain;
 	private Group group;
+	private List<Atom> totGroup;
 	private ChemComp cc = new ChemComp();
 
 
@@ -82,6 +83,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		default:
 			group = new HetatomImpl();
 		}
+		totGroup = new ArrayList<Atom>();
 		// Set the CC -> empty but not null
 		group.setChemComp(cc);
 		group.setPDBName(groupName);
@@ -136,6 +138,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		if ( ! group.hasAtom(atom.getName())) {
 			group.addAtom(atom);
 		}
+		totGroup.add(atom);
 	}
 
 	/**
@@ -146,8 +149,8 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	 */
 	public void setBondOrders(int indOne, int indTwo, int bondOrder){
 		// Get the atom
-		Atom atomOne = group.getAtom(indOne);
-		Atom atomTwo = group.getAtom(indTwo);
+		Atom atomOne = totGroup.get(indOne);
+		Atom atomTwo = totGroup.get(indTwo);
 		// set the new bond
 		@SuppressWarnings("unused")
 		BondImpl bond = new BondImpl(atomOne, atomTwo, bondOrder);
