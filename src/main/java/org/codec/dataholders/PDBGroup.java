@@ -32,6 +32,8 @@ public class PDBGroup implements Serializable {
 	private List<Integer> bondIndices = new ArrayList<Integer>();
 	// The atomic charges of these atoms
 	private List<Integer> atomCharges = new ArrayList<Integer>();
+	// The single letter code
+	private String singleLetterCode;
 	
 	// Generic getter and setter functions
 	public List<String> getAtomInfo() {
@@ -70,5 +72,11 @@ public class PDBGroup implements Serializable {
 	}
 	public void setAtomCharges(List<Integer> atomCharges) {
 		this.atomCharges = atomCharges;
+	}
+	public String getSingleLetterCode() {
+		return singleLetterCode;
+	}
+	public void setSingleLetterCode(String singleLetterCode) {
+		this.singleLetterCode = singleLetterCode;
 	}
 }
