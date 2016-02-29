@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *  Class to store group level information in the MMTF data formate
  * @author anthony
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PDBGroup implements Serializable {
 	/**
 	 * Serial id for this version of the format
