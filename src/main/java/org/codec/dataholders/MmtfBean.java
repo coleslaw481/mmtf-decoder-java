@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * A class to store the data sent in an MMTF data source
  * @author anthony
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MmtfBean {
 	
 	// The version of the format
@@ -30,7 +33,7 @@ public class MmtfBean {
 	private int[] internalChainsPerModel;
 	// List to store the chainids
 	private byte[] chainList;
-	// List to store the intenral chain ids
+//	// List to store the intenral chain ids
 	private byte[] internalChainList;
 	// List to store the number of groups per chain
 	private int[] groupsPerChain;
