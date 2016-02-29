@@ -101,7 +101,6 @@ public class GetBioJavaStructs {
 	 */
 	public Structure getFromFileSystem(String basePath, String pdbCode) throws FileNotFoundException, IOException{
 		// Now return this
-		System.out.println("GETTING FROM FILE SYSTEM");
 		return getFromFileSystem(basePath+"/data/structures/divided/msgpack"+"/"+pdbCode.substring(1, 3)+"/"+pdbCode+".mmtf");
 	}
 

@@ -26,10 +26,16 @@ public class MmtfBean {
 	private int numAtoms;
 	// Add this to store the model information
 	private int[] chainsPerModel;
+	// Add this to store the model information
+	private int[] internalChainsPerModel;
 	// List to store the chainids
 	private byte[] chainList;
+	// List to store the intenral chain ids
+	private byte[] internalChainList;
 	// List to store the number of groups per chain
 	private int[] groupsPerChain;
+	// List to store the number of groups per internal chain
+	private int[] internalGroupsPerChain;
 	// String for the space group
 	private String spaceGroup;
 	// The unit cell information
@@ -66,8 +72,6 @@ public class MmtfBean {
 	// Delta and run length encoded
 	private byte[] atomIdList; 
 
-
-	
 	public String getSpaceGroup() {
 		return spaceGroup;
 	}
@@ -252,6 +256,24 @@ public class MmtfBean {
 	}
 	public void setBondOrderList(byte[] bondOrderList) {
 		this.bondOrderList = bondOrderList;
+	}
+	public int[] getInternalChainsPerModel() {
+		return internalChainsPerModel;
+	}
+	public void setInternalChainsPerModel(int[] internalChainsPerModel) {
+		this.internalChainsPerModel = internalChainsPerModel;
+	}
+	public byte[] getInternalChainList() {
+		return internalChainList;
+	}
+	public void setInternalChainList(byte[] internalChainList) {
+		this.internalChainList = internalChainList;
+	}
+	public int[] getInternalGroupsPerChain() {
+		return internalGroupsPerChain;
+	}
+	public void setInternalGroupsPerChain(int[] internalGroupsPerChain) {
+		this.internalGroupsPerChain = internalGroupsPerChain;
 	}
 
 }

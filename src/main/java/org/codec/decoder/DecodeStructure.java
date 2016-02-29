@@ -76,25 +76,9 @@ public class DecodeStructure {
 			structInflator.setModelInfo(modelCounter, modelChains);
 			int totChainsThisMod = chainCounter+modelChains;
 			for (int thisChain=chainCounter; thisChain<totChainsThisMod; thisChain++){
-				// Get the bytes for the  chain 
-				// Get a stringbuilder
-				StringBuilder sb = new StringBuilder();
-				byte chainIdOne = chainList[thisChain*4+0];
-				sb.append((char) chainIdOne);
-				byte chainIdTwo = chainList[thisChain*4+1];
-				if(chainIdTwo!=(byte) 0){
-					sb.append((char) chainIdTwo);
-				}
-				byte chainIdThree = chainList[thisChain*4+2];
-				if(chainIdThree!=(byte) 0){
-					sb.append((char) chainIdThree);
-				}
-				byte chainIdFour = chainList[thisChain*4+3];
-				if(chainIdFour!=(byte) 0){
-					sb.append((char) chainIdFour);
-				}
+				String thisChainIdString = getChainId(chainList, thisChain);
 				int groupsThisChain = groupsPerChain[thisChain];
-				structInflator.setChainInfo(sb.toString(), groupsThisChain);
+				structInflator.setChainInfo(thisChainIdString, groupsThisChain);
 				int nextInd = groupCounter+groupsThisChain;
 				for(int thisGroupNum=groupCounter; thisGroupNum<nextInd;thisGroupNum++){
 					groupCounter++;
@@ -187,12 +171,40 @@ public class DecodeStructure {
 	}
 
 	/**
+	 * Function to get the chain id for this chain
+	 * @param chainList
+	 * @param thisChain
+	 * @return
+	 */
+	public String getChainId(byte[] chainList,int thisChain) {
+		// Get the bytes for the  chain 
+		// Get a stringbuilder
+		
+		StringBuilder sb = new StringBuilder();
+		byte chainIdOne = chainList[thisChain*4+0];
+		sb.append((char) chainIdOne);
+		byte chainIdTwo = chainList[thisChain*4+1];
+		if(chainIdTwo!=(byte) 0){
+			sb.append((char) chainIdTwo);
+		}
+		byte chainIdThree = chainList[thisChain*4+2];
+		if(chainIdThree!=(byte) 0){
+			sb.append((char) chainIdThree);
+		}
+		byte chainIdFour = chainList[thisChain*4+3];
+		if(chainIdFour!=(byte) 0){
+			sb.append((char) chainIdFour);
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * Function to convert a byte array to an int array
 	 * @param inArray
 	 * @return
 	 * @throws IOException
 	 */
-	private int[] bytesToInts(byte[] inArray) throws IOException {
+	public int[] bytesToInts(byte[] inArray) throws IOException {
 		// TODO Auto-generated method stub
 		DataInputStream bis = new DataInputStream(new ByteArrayInputStream(inArray));
 

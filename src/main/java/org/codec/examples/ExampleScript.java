@@ -16,7 +16,7 @@ public class ExampleScript {
 		// Set the PDB_CACHE_DIR path 
 		System.setProperty("PDB_CACHE_DIR","/Users/anthony/PDB_CACHE");
 		GetBioJavaStructs gbjs = new GetBioJavaStructs();
-		Structure thatStruct = gbjs.getFromUrl("1aq1");
+		Structure thatStruct = gbjs.getFromUrl("4cuq");
 		System.out.println(thatStruct.getChains());
 	}
 
