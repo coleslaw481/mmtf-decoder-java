@@ -33,7 +33,7 @@ public class MmtfBean {
 	private int[] internalChainsPerModel;
 	// List to store the chainids
 	private byte[] chainList;
-//	// List to store the intenral chain ids
+	// List to store the internal chain ids
 	private byte[] internalChainList;
 	// List to store the number of groups per chain
 	private int[] groupsPerChain;
@@ -266,17 +266,17 @@ public class MmtfBean {
 	public void setInternalChainsPerModel(int[] internalChainsPerModel) {
 		this.internalChainsPerModel = internalChainsPerModel;
 	}
-	public byte[] getInternalChainList() {
-		return internalChainList;
-	}
-	public void setInternalChainList(byte[] internalChainList) {
-		this.internalChainList = internalChainList;
-	}
 	public int[] getInternalGroupsPerChain() {
 		return internalGroupsPerChain;
 	}
 	public void setInternalGroupsPerChain(int[] internalGroupsPerChain) {
 		this.internalGroupsPerChain = internalGroupsPerChain;
+	}
+	public byte[] getInternalChainList() {
+		return internalChainList;
+	}
+	public void setInternalChainList(byte[] internalChainList) {
+		this.internalChainList = internalChainList;
 	}
 
 }
