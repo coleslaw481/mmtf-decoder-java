@@ -23,7 +23,7 @@ import org.codec.decoder.DecodeStructure;
  */
 public class GetBioJavaStructs {
 	// The base URL used to get data
-	private String baseUrl = "http://132.249.213.68:8080/servemessagepack/";
+	private String baseUrl = "http://mmtf.rcsb.org/full/";
 
 
 	/**
