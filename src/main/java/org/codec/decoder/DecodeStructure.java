@@ -33,7 +33,7 @@ public class DecodeStructure {
 	 * @return
 	 * @throws IOException
 	 */
-	public void getStructFromByteArray(byte[] myInBytes, StructureInflatorInterface structInflator) throws IOException {
+	public void getStructFromByteArray(byte[] myInBytes, StructureInflatorInterface structInflator, ParsingParams parsingParams) throws IOException {
 		// Create a list of all the nucleic acid ids
 		List<String> nucAcidList = new ArrayList<String>();		
 		// Set the variables to multiply by
@@ -47,9 +47,19 @@ public class DecodeStructure {
 		com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper(new MessagePackFactory());
 		MmtfBean xs = objectMapper.readValue(myInBytes, MmtfBean.class);
 		// GET THE MODEL LIST AND THE CHAIN MAP
-		byte[] chainList = xs.getChainList();
-		int[] chainsPerModel = xs.getChainsPerModel();
-		int[] groupsPerChain = xs.getGroupsPerChain();
+		byte[] chainList;
+		int[] chainsPerModel;
+		int[] groupsPerChain;
+		if(parsingParams.isParseInternal()==false){
+			chainList = xs.getChainList();
+			chainsPerModel = xs.getChainsPerModel();
+			groupsPerChain = xs.getGroupsPerChain();
+		}	
+		else{
+			chainList = xs.getInternalChainList();
+			chainsPerModel = xs.getInternalChainsPerModel();
+			groupsPerChain = xs.getInternalGroupsPerChain();
+		}
 		// Now get the group map
 		// NEED TO ADD THIS INFORMATION AS A HEADER
 		int[] groupList = bytesToInts(xs.getGroupTypeList());
@@ -179,7 +189,7 @@ public class DecodeStructure {
 	public String getChainId(byte[] chainList,int thisChain) {
 		// Get the bytes for the  chain 
 		// Get a stringbuilder
-		
+
 		StringBuilder sb = new StringBuilder();
 		byte chainIdOne = chainList[thisChain*4+0];
 		sb.append((char) chainIdOne);

@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.biojava.nbio.structure.Structure;
 import org.codec.decoder.BioJavaStructureInflator;
 import org.codec.decoder.DecodeStructure;
+import org.codec.decoder.ParsingParams;
 
 /**
  * Some helper functions and utilit functions to get structures from BioJava - really just for canary release and testing
@@ -24,7 +25,7 @@ import org.codec.decoder.DecodeStructure;
 public class GetBioJavaStructs {
 	// The base URL used to get data
 	private String baseUrl = "http://mmtf.rcsb.org/full/";
-
+	private ParsingParams pp = new ParsingParams();
 
 	/**
 	 * 
@@ -55,7 +56,7 @@ public class GetBioJavaStructs {
 		// Cache this
 		cacheFile(b, basePath, inputCode);
 		// Now get the actual structure
-		ds.getStructFromByteArray(deflateGzip(b), bjs);
+		ds.getStructFromByteArray(deflateGzip(b), bjs, pp);
 		return bjs.getStructure();
 	}
 
@@ -118,7 +119,7 @@ public class GetBioJavaStructs {
 		// Get these as an inputstream
 		byte[] b = deflateGzip(IOUtils.toByteArray(new FileInputStream(new File(fullPath))));
 		// Now get the actual structure
-		ds.getStructFromByteArray(b, bjs);
+		ds.getStructFromByteArray(b, bjs, pp);
 		return bjs.getStructure();
 	}
 

@@ -9,7 +9,7 @@ import java.util.Map;
  *
  */
 public interface StructureInflatorInterface {
-
+	
 	/**
 	 * 
 	 * @param modelCount
