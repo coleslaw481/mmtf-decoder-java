@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.rcsb.mmtf.arraydecompressors.DeltaDeCompress;
+import org.rcsb.mmtf.arraydecompressors.RunLengthDecodeInt;
+import org.rcsb.mmtf.arraydecompressors.RunLengthDecodeString;
+
 import static org.junit.Assert.*;
 
 /**

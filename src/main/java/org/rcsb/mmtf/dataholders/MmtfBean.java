@@ -1,4 +1,4 @@
-package org.codec.dataholders;
+package org.rcsb.mmtf.dataholders;
 
 import java.util.ArrayList;
 import java.util.HashMap;

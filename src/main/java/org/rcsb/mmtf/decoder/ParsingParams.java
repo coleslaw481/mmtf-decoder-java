@@ -1,4 +1,4 @@
-package org.codec.decoder;
+package org.rcsb.mmtf.decoder;
 
 public class ParsingParams {
 	

@@ -1,4 +1,4 @@
-package org.codec.dataholders;
+package org.rcsb.mmtf.dataholders;
 
 import java.io.Serializable;
 import java.util.ArrayList;

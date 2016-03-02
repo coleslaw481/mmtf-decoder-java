@@ -1,4 +1,4 @@
-package org.codec.decoder;
+package org.rcsb.mmtf.decoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -8,17 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codec.dataholders.BioAssemblyInfoNew;
-import org.codec.dataholders.BiologicalAssemblyTransformationNew;
-import org.codec.dataholders.MmtfBean;
-import org.codec.dataholders.PDBGroup;
-
-import org.codec.arraydecompressors.DeltaDeCompress;
-import org.codec.arraydecompressors.RunLengthDecodeInt;
-import org.codec.arraydecompressors.RunLengthDelta;
-import org.codec.arraydecompressors.RunLengthDecodeString;
-
 import org.msgpack.jackson.dataformat.MessagePackFactory;
+import org.rcsb.mmtf.arraydecompressors.DeltaDeCompress;
+import org.rcsb.mmtf.arraydecompressors.RunLengthDecodeInt;
+import org.rcsb.mmtf.arraydecompressors.RunLengthDecodeString;
+import org.rcsb.mmtf.arraydecompressors.RunLengthDelta;
+import org.rcsb.mmtf.dataholders.BioAssemblyInfoNew;
+import org.rcsb.mmtf.dataholders.BiologicalAssemblyTransformationNew;
+import org.rcsb.mmtf.dataholders.MmtfBean;
+import org.rcsb.mmtf.dataholders.PDBGroup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +33,7 @@ public class DecodeStructure {
 	 * @return
 	 * @throws IOException
 	 */
-	public void getStructFromByteArray(byte[] myInBytes, StructureInflatorInterface structInflator, ParsingParams parsingParams) throws IOException {
+	public void getStructFromByteArray(byte[] myInBytes, StructureDecoderInterface structInflator, ParsingParams parsingParams) throws IOException {
 		// Create a list of all the nucleic acid ids
 		List<String> nucAcidList = new ArrayList<String>();		
 		// Set the variables to multiply by
@@ -136,7 +134,7 @@ public class DecodeStructure {
 						int thisBondOrder = bondOrders.get(thisBond);
 						int thisBondIndOne = bondInds.get(thisBond*2);
 						int thisBondIndTwo = bondInds.get(thisBond*2+1);;
-						structInflator.setGroupBondOrders(thisBondIndOne, thisBondIndTwo, thisBondOrder);
+						structInflator.setGroupBonds(thisBondIndOne, thisBondIndTwo, thisBondOrder);
 					}
 				}
 				chainCounter++;
@@ -184,7 +182,7 @@ public class DecodeStructure {
 		int[] bondOrderList = bytesToByteInts(inputData.getBondOrderList());
 
 		for(int i=0; i<bondOrderList.length;i++){
-			structInflator.setInterGroupBondOrders(bondAtomList[i*2], bondAtomList[i*2+1], bondOrderList[i]);
+			structInflator.setInterGroupBonds(bondAtomList[i*2], bondAtomList[i*2+1], bondOrderList[i]);
 		}
 		
 	}

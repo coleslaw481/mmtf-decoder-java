@@ -1,4 +1,4 @@
-package org.codec.examples;
+package org.rcsb.mmtf.examples;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,9 +13,9 @@ import java.util.zip.GZIPInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.biojava.nbio.structure.Structure;
-import org.codec.decoder.BioJavaStructureInflator;
-import org.codec.decoder.DecodeStructure;
-import org.codec.decoder.ParsingParams;
+import org.rcsb.mmtf.decoder.BioJavaStructureDecoder;
+import org.rcsb.mmtf.decoder.DecodeStructure;
+import org.rcsb.mmtf.decoder.ParsingParams;
 
 /**
  * Some helper functions and utilit functions to get structures from BioJava - really just for canary release and testing
@@ -50,7 +50,7 @@ public class GetBioJavaStructs {
 		}
 		
 		DecodeStructure ds = new DecodeStructure();
-		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
+		BioJavaStructureDecoder bjs = new BioJavaStructureDecoder();
 		// Get these as an inputstream
 		byte[] b = IOUtils.toByteArray((new URL(baseUrl+inputCode)).openStream());
 		// Cache this
@@ -115,7 +115,7 @@ public class GetBioJavaStructs {
 	 */
 	public Structure getFromFileSystem(String fullPath) throws FileNotFoundException, IOException{
 		DecodeStructure ds = new DecodeStructure();
-		BioJavaStructureInflator bjs = new BioJavaStructureInflator();
+		BioJavaStructureDecoder bjs = new BioJavaStructureDecoder();
 		// Get these as an inputstream
 		byte[] b = deflateGzip(IOUtils.toByteArray(new FileInputStream(new File(fullPath))));
 		// Now get the actual structure

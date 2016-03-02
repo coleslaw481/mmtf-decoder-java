@@ -1,9 +1,11 @@
-package org.codec.decoder;
+package org.rcsb.mmtf.decoder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.vecmath.Matrix4d;
 
@@ -32,48 +34,53 @@ import org.biojava.nbio.structure.xtal.SpaceGroup;
 
 /**
  * A biojava specific structure inflator for MMTF -> Should be ported to biojava code
- * @author anthony
+ * @author Anthony Bradley
  *
  */
-public class BioJavaStructureInflator implements StructureInflatorInterface {
+public class BioJavaStructureDecoder implements StructureDecoderInterface, Serializable {
+
+	private static final long serialVersionUID = 6772030485225130853L;
+
 	private Structure structure;
-	private int modelNumber = 0;
+	private int modelNumber;
 	private Chain chain;
 	private Group group;
 	private List<Atom> totGroup;
-	private ChemComp cc = new ChemComp();
-	private List<Atom> allAtoms = new ArrayList<Atom>();
+	private ChemComp cc;
+	private List<Atom> allAtoms;
 
-	public BioJavaStructureInflator() {
+	public BioJavaStructureDecoder() {
 		structure = new StructureImpl();
+		modelNumber = 0;
+		cc = new ChemComp();
+		allAtoms  = new ArrayList<Atom>();
 	}
 
 	public Structure getStructure() {
 		return structure;
 	}
 
-	/** 
-	 * In biojava this function does nothing
-	 */
+	@Override 
 	public void setModelCount(int inputModelCount) {
 	}
 
+	@Override 
 	public void setModelInfo(int inputModelNumber, int chainCount) {
-		//		System.out.println("modelNumber: " + modelNumber + " chainCount: " + chainCount);
 		modelNumber = inputModelNumber;
 		structure.addModel(new ArrayList<Chain>(chainCount));
 	}
 
+	@Override 
 	public void setChainInfo(String chainId, int groupCount) {
-		//		System.out.println("chainId: " + chainId + " groupCount: " + groupCount);
 		chain = new ChainImpl();
 		chain.setChainID(chainId.trim());
 		structure.addChain(chain, modelNumber);
 	}
 
+
+	@Override 
 	public void setGroupInfo(String groupName, int groupNumber,
 			char insertionCode, int polymerType, int atomCount) {
-		//		System.out.println("groupName: " + groupName + " groupNumber: " + groupNumber + " insertionCode: " + insertionCode + " polymerType: " + polymerType + " atomCount: " + atomCount);
 		switch (polymerType) {
 		case 1: 
 			AminoAcid aa = new AminoAcidImpl();
@@ -109,6 +116,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	}
 
 
+	@Override
 	public void setAtomInfo(String atomName, int serialNumber, char alternativeLocationId, float x,
 			float y, float z, float occupancy, float temperatureFactor,
 			String element, int charge) {
@@ -138,7 +146,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 			altGroup.setChain(chain);
 			altGroup.addAtom(atom);
 		}
-		
+
 		if ( ! group.hasAtom(atom.getName())) {
 			group.addAtom(atom);
 		}
@@ -146,13 +154,8 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		allAtoms.add(atom);
 	}
 
-	/**
-	 * Function to create bonds in the biojava structure objects
-	 * @param indOne The first atom's index
-	 * @param indTwo The second atom's index
-	 * @param bondOrder The bond order
-	 */
-	public void setGroupBondOrders(int indOne, int indTwo, int bondOrder){
+	@Override
+	public void setGroupBonds(int indOne, int indTwo, int bondOrder){
 		// Get the atom
 		Atom atomOne = totGroup.get(indOne);
 		Atom atomTwo = totGroup.get(indTwo);
@@ -162,13 +165,8 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 
 	}
 
-	/**
-	 * In this case the indices are specified on an intergroup level
-	 * @param indOne
-	 * @param indTwo
-	 * @param bondOrder
-	 */
-	public void setInterGroupBondOrders(int indOne, int indTwo, int bondOrder){
+	@Override
+	public void setInterGroupBonds(int indOne, int indTwo, int bondOrder){
 		// Get the atom
 		Atom atomOne = allAtoms.get(indOne);
 		Atom atomTwo = allAtoms.get(indTwo);
@@ -177,18 +175,14 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		BondImpl bond = new BondImpl(atomOne, atomTwo, bondOrder);
 
 	}
-	
-	
+
+
 	/**
-	 * Copied from BioJava
+	 * Generates Alternate location groups
 	 * @param altLoc
-	 * @param recordName
-	 * @param aminoCode1
-	 * @param groupCode3
-	 * @param seq_id
 	 * @return
 	 */
-	private Group getCorrectAltLocGroup( Character altLoc) {
+	private Group getCorrectAltLocGroup(Character altLoc) {
 
 		// see if we know this altLoc already;
 		List<Atom> atoms = group.getAtoms();
@@ -203,20 +197,14 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 
 		// Get the altLovGroup
 		Group altLocgroup = group.getAltLocGroup(altLoc);
-		if(altLocgroup==null){
-			
-		}
-		else{
+		if(altLocgroup!=null){
 			return altLocgroup;
 		}
 		// no matching altLoc group found.
 		// build it up.
-
 		if ( group.getAtoms().size() == 0) {
-			//System.out.println("current group is empty " + current_group + " " + altLoc);
 			return group;
 		}
-		//System.out.println("cloning current group " + current_group + " " + current_group.getAtoms().get(0).getAltLoc() + " altLoc " + altLoc);
 		Group altLocG = (Group) group.clone();
 		// drop atoms from cloned group...
 		// https://redmine.open-bio.org/issues/3307
@@ -226,22 +214,23 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 		return altLocG;	
 
 	}
-	/**
-	 * Function to set the bioassmebly info
-	 * @param inputAssembly
-	 */
+
+	@Override
 	public void setBioAssembly(Map<Integer, Integer> keyList, Map<Integer, Integer> sizeList, Map<Integer, List<String>> inputIds, Map<Integer, List<String>> inputChainIds, Map<Integer, List<double[]>> inputTransformations){
 		PDBHeader pdbHeader = structure.getPDBHeader();
 		// Get the bioassebly data
-		Map<Integer,BioAssemblyInfo> bioAssemblies = new HashMap<Integer,BioAssemblyInfo>();
-		for(Integer key: keyList.keySet()){
+		Map<Integer,BioAssemblyInfo> bioAssemblies = new HashMap<>();
+		for(Entry<Integer, Integer> entry: keyList.entrySet()){
+			// Get the key and the value
+			Integer key = entry.getKey();
+			Integer value = entry.getValue();
 			// Make a biojava bioassembly object
 			BioAssemblyInfo bioAssInfo = new  BioAssemblyInfo();
-			bioAssInfo.setId(keyList.get(key));
+			bioAssInfo.setId(value);
 			// Set size
 			bioAssInfo.setMacromolecularSize(sizeList.get(key));
 			// Now get the new sizes
-			List<BiologicalAssemblyTransformation> newList = new ArrayList<BiologicalAssemblyTransformation>();
+			List<BiologicalAssemblyTransformation> newList = new ArrayList<>();
 			for(int i=0;i<inputIds.get(key).size();i++){
 				BiologicalAssemblyTransformation bioAssTrans = new BiologicalAssemblyTransformation();
 				bioAssTrans.setId(inputIds.get(key).get(i));
@@ -263,9 +252,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	}
 
 
-	/**
-	 * Function to set the crystallographic information
-	 */
+	@Override
 	public void setXtalInfo(String spaceGroup, List<Float> unitCell){
 		// Now set the xtalographic information
 		PDBCrystallographicInfo pci = new PDBCrystallographicInfo();
@@ -277,6 +264,4 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 			structure.setCrystallographicInfo(pci);
 		}
 	}
-
-
 }
