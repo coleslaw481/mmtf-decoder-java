@@ -16,7 +16,7 @@ public class CalphaAlignBean {
 	private String chainId;
 	private String polymerType;
 	private char[] sequence;
-	private List<Point3d> coordList;
+	private Point3d[] coordList;
 
 	
 	public String getPdbId() {
@@ -43,11 +43,12 @@ public class CalphaAlignBean {
 	public void setSequence(char[] sequence) {
 		this.sequence = sequence;
 	}
-	public List<Point3d> getCoordList() {
+	public Point3d[] getCoordList() {
 		return coordList;
 	}
-	public void setCoordList(List<Point3d> coordList) {
+	public void setCoordList(Point3d[] coordList) {
 		this.coordList = coordList;
 	}
+
 	
 }
