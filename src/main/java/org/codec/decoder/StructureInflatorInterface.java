@@ -83,6 +83,13 @@ public interface StructureInflatorInterface {
 	 * @param thisBondIndTwo
 	 * @param thisBondOrder
 	 */
-	void setBondOrders(int thisBondIndOne, int thisBondIndTwo, int thisBondOrder);
+	void setGroupBondOrders(int thisBondIndOne, int thisBondIndTwo, int thisBondOrder);
 	
+	/**
+	 * Function to set the bonds between atoms
+	 * @param thisBondIndOne
+	 * @param thisBondIndTwo
+	 * @param thisBondOrder
+	 */
+	void setInterGroupBondOrders(int thisBondIndOne, int thisBondIndTwo, int thisBondOrder);
 }

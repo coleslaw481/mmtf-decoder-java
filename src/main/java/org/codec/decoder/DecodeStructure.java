@@ -20,6 +20,8 @@ import org.codec.arraydecompressors.RunLengthDecodeString;
 
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Class to actually decode an MMTF using a specific structure inflator
  * @author anthony
@@ -44,40 +46,39 @@ public class DecodeStructure {
 		RunLengthDelta intrunlength_delta = new RunLengthDelta();
 		RunLengthDecodeInt intrunlength = new RunLengthDecodeInt();
 		RunLengthDecodeString stringRunlength = new RunLengthDecodeString();		
-		com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper(new MessagePackFactory());
-		MmtfBean xs = objectMapper.readValue(myInBytes, MmtfBean.class);
+		MmtfBean inputData = new ObjectMapper(new MessagePackFactory()).readValue(myInBytes, MmtfBean.class);
 		// GET THE MODEL LIST AND THE CHAIN MAP
 		byte[] chainList;
 		int[] chainsPerModel;
 		int[] groupsPerChain;
 		if(parsingParams.isParseInternal()==false){
-			chainList = xs.getChainList();
-			chainsPerModel = xs.getChainsPerModel();
-			groupsPerChain = xs.getGroupsPerChain();
+			chainList = inputData.getChainList();
+			chainsPerModel = inputData.getChainsPerModel();
+			groupsPerChain = inputData.getGroupsPerChain();
 		}	
 		else{
-			chainList = xs.getInternalChainList();
-			chainsPerModel = xs.getInternalChainsPerModel();
-			groupsPerChain = xs.getInternalGroupsPerChain();
+			chainList = inputData.getInternalChainList();
+			chainsPerModel = inputData.getInternalChainsPerModel();
+			groupsPerChain = inputData.getInternalGroupsPerChain();
 		}
 		// Now get the group map
 		// NEED TO ADD THIS INFORMATION AS A HEADER
-		int[] groupList = bytesToInts(xs.getGroupTypeList());
+		int[] groupList = bytesToInts(inputData.getGroupTypeList());
 		int lastCount = 0;
 		// Read the byte arrays as int arrays
 		// Get the length of the 
-		int[] cartnX = delta.decompressByteArray(xs.getxCoordBig(),xs.getxCoordSmall());
-		int[] cartnY = delta.decompressByteArray(xs.getyCoordBig(),xs.getyCoordSmall());
-		int[] cartnZ = delta.decompressByteArray(xs.getzCoordBig(),xs.getzCoordSmall());
-		int[] bFactor =  delta.decompressByteArray(xs.getbFactorBig(),xs.getbFactorSmall());
-		int[] occupancyArr = intrunlength.decompressByteArray(xs.getOccList());
-		int[] atomId = intrunlength_delta.decompressByteArray(xs.getAtomIdList());
-		char[] altId = stringRunlength.deCompressStringArrayToChar((ArrayList<String>) xs.getAltLabelList());
+		int[] cartnX = delta.decompressByteArray(inputData.getxCoordBig(),inputData.getxCoordSmall());
+		int[] cartnY = delta.decompressByteArray(inputData.getyCoordBig(),inputData.getyCoordSmall());
+		int[] cartnZ = delta.decompressByteArray(inputData.getzCoordBig(),inputData.getzCoordSmall());
+		int[] bFactor =  delta.decompressByteArray(inputData.getbFactorBig(),inputData.getbFactorSmall());
+		int[] occupancyArr = intrunlength.decompressByteArray(inputData.getOccList());
+		int[] atomId = intrunlength_delta.decompressByteArray(inputData.getAtomIdList());
+		char[] altId = stringRunlength.deCompressStringArrayToChar((ArrayList<String>) inputData.getAltLabelList());
 		// Get the insertion code
-		char[] insCode = stringRunlength.deCompressStringArrayToChar((ArrayList<String>) xs.getInsCodeList());
+		char[] insCode = stringRunlength.deCompressStringArrayToChar((ArrayList<String>) inputData.getInsCodeList());
 		// Get the groupNumber
-		int[] groupNum = intrunlength_delta.decompressByteArray(xs.getGroupNumList());
-		Map<Integer, PDBGroup> groupMap = xs.getGroupMap();
+		int[] groupNum = intrunlength_delta.decompressByteArray(inputData.getGroupNumList());
+		Map<Integer, PDBGroup> groupMap = inputData.getGroupMap();
 		int modelCounter = -1;
 		int groupCounter = 0;
 		int chainCounter = 0;
@@ -135,16 +136,16 @@ public class DecodeStructure {
 						int thisBondOrder = bondOrders.get(thisBond);
 						int thisBondIndOne = bondInds.get(thisBond*2);
 						int thisBondIndTwo = bondInds.get(thisBond*2+1);;
-						structInflator.setBondOrders(thisBondIndOne, thisBondIndTwo, thisBondOrder);
+						structInflator.setGroupBondOrders(thisBondIndOne, thisBondIndTwo, thisBondOrder);
 					}
 				}
 				chainCounter++;
 			}
 		}
 		// Now set the crystallographic and the bioassembly information
-		structInflator.setXtalInfo(xs.getSpaceGroup(), xs.getUnitCell());
+		structInflator.setXtalInfo(inputData.getSpaceGroup(), inputData.getUnitCell());
 		/// NOW SET ALL THESE INPUT VARS  
-		Map<Integer, BioAssemblyInfoNew> bioAss = xs.getBioAssembly();
+		Map<Integer, BioAssemblyInfoNew> bioAss = inputData.getBioAssembly();
 		// The maps for storing this information
 		Map<Integer, Integer> keyList = new HashMap<Integer, Integer>();
 		Map<Integer, Integer> sizeList = new HashMap<Integer, Integer>();
@@ -178,6 +179,14 @@ public class DecodeStructure {
 		}
 		// Set the bioassembly information
 		structInflator.setBioAssembly(keyList, sizeList,  inputIds, inputChainIds, inputTransformations);
+		// Now add the other bonds
+		int[] bondAtomList = bytesToInts(inputData.getBondAtomList());
+		int[] bondOrderList = bytesToByteInts(inputData.getBondOrderList());
+
+		for(int i=0; i<bondOrderList.length;i++){
+			structInflator.setInterGroupBondOrders(bondAtomList[i*2], bondAtomList[i*2+1], bondOrderList[i]);
+		}
+		
 	}
 
 	/**
@@ -215,7 +224,6 @@ public class DecodeStructure {
 	 * @throws IOException
 	 */
 	public int[] bytesToInts(byte[] inArray) throws IOException {
-		// TODO Auto-generated method stub
 		DataInputStream bis = new DataInputStream(new ByteArrayInputStream(inArray));
 
 		// Define an array to return
@@ -225,6 +233,24 @@ public class DecodeStructure {
 		}
 
 		return outArr;
+	}
+	
+	/**
+	 * Function to convert a byte array to byte encoded 
+	 * @param inArray
+	 * @return
+	 * @throws IOException 
+	 */
+	public int[] bytesToByteInts(byte[] inArray) throws IOException {
+		DataInputStream bis = new DataInputStream(new ByteArrayInputStream(inArray));
+		// Define an array to return
+		int[] outArr = new int[inArray.length];
+		for(int i=0; i<inArray.length;i++){
+			outArr[i] = (int) bis.readByte();
+		}
+
+		return outArr;
+		
 	}
 
 

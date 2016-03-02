@@ -42,7 +42,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	private Group group;
 	private List<Atom> totGroup;
 	private ChemComp cc = new ChemComp();
-
+	private List<Atom> allAtoms = new ArrayList<Atom>();
 
 	public BioJavaStructureInflator() {
 		structure = new StructureImpl();
@@ -143,6 +143,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 			group.addAtom(atom);
 		}
 		totGroup.add(atom);
+		allAtoms.add(atom);
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 	 * @param indTwo The second atom's index
 	 * @param bondOrder The bond order
 	 */
-	public void setBondOrders(int indOne, int indTwo, int bondOrder){
+	public void setGroupBondOrders(int indOne, int indTwo, int bondOrder){
 		// Get the atom
 		Atom atomOne = totGroup.get(indOne);
 		Atom atomTwo = totGroup.get(indTwo);
@@ -161,7 +162,23 @@ public class BioJavaStructureInflator implements StructureInflatorInterface {
 
 	}
 
+	/**
+	 * In this case the indices are specified on an intergroup level
+	 * @param indOne
+	 * @param indTwo
+	 * @param bondOrder
+	 */
+	public void setInterGroupBondOrders(int indOne, int indTwo, int bondOrder){
+		// Get the atom
+		Atom atomOne = allAtoms.get(indOne);
+		Atom atomTwo = allAtoms.get(indTwo);
+		// set the new bond
+		@SuppressWarnings("unused")
+		BondImpl bond = new BondImpl(atomOne, atomTwo, bondOrder);
 
+	}
+	
+	
 	/**
 	 * Copied from BioJava
 	 * @param altLoc
