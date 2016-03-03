@@ -6,63 +6,74 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunLengthDecodeInt implements IntArrayDeCompressor{
-	
-	
-	public List<Integer> decompressIntArray(List<Integer> inArray) {
-		// Make the output array
-		List<Integer> outArray =  new ArrayList<Integer>();
-		// Loop through the vals
-		for (int i = 0; i < inArray.size(); i+=2) {
-			// Get the value out here
-			int intIn = inArray.get(i);
-			int numOfInt = inArray.get(i+1);
-			// Now add these to the array
-			for (int j=0; j<numOfInt; j++){
-				outArray.add(intIn);
-			}
-		}
-		return outArray;
-	}
+/**
+ * Run length decode a list of integers.
+ * @author Anthony Bradley
+ *
+ */
+public class RunLengthDecodeInt implements IntArrayDeCompressorInterface {
 
-	/**
-	 * Function to decompress a byte array that is run length encoded
-	 * @param inArray
-	 * @return
-	 * @throws IOException
-	 */
-	public int[] decompressByteArray(byte[] inArray) throws IOException {
+  /**
+   * The number of bytes in a four byte integers.
+   */
+  private static final int BIG_INT_BYTES = 4;
+  /**
+   * Decompress a byte array that is run length encoded.
+   * @param inArray
+   * @return
+   * @throws IOException
+   * @return int[]
+   */
+  public final int[] decompressByteArray(final byte[] inArray) throws IOException {
 
-		// Array to store all the different numbers
-		int[] numArr = new int[inArray.length/8];
-		int[] countArr = new int[inArray.length/8];
-		// Get the size
-		int totCount = 0;
-		DataInputStream bis = new DataInputStream(new ByteArrayInputStream(inArray));
-		for(int i=0; i< inArray.length/8; i++){
-			// Get the number
-			int getNum = bis.readInt();
-			int getCount = bis.readInt();
-			totCount += getCount;
-			numArr[i] = getNum;
-			countArr[i] = getCount;
-		}
-		// Now set this output array
-		int[] outArr = new int[totCount];
-		int totCounter =0;
-		for(int i=0;i<numArr.length;i++){
-			// 
-			int thisAns = numArr[i];
-			for(int j=0; j<countArr[i]; j++){
-				// Annd then add t is to the array
-				outArr[totCounter] = thisAns;
-				// Now add to the counter
-				totCounter++;
+    int lengthOfBigIntArr = inArray.length / (BIG_INT_BYTES * 2);
+    // Array to store all the different numbers
+    int[] numArr = new int[lengthOfBigIntArr];
+    int[] countArr = new int[lengthOfBigIntArr];
+    // Get the size
+    int totCount = 0;
+    DataInputStream bis = new DataInputStream(new
+        ByteArrayInputStream(inArray));
+    for (int i = 0; i < lengthOfBigIntArr; i++) {
+      // Get the number
+      int getNum = bis.readInt();
+      int getCount = bis.readInt();
+      totCount += getCount;
+      numArr[i] = getNum;
+      countArr[i] = getCount;
+    }
+    // Now set this output array
+    int[] outArr = new int[totCount];
+    int totCounter = 0;
+    for (int i = 0; i < numArr.length; i++) {
+      int thisAns = numArr[i];
+      for (int j = 0; j < countArr[i]; j++) {
+        // Annd then add t is to the array
+        outArr[totCounter] = thisAns;
+        // Now add to the counter
+        totCounter++;
 
-			}
+      }
 
-		}
-		return outArr;
-	}
+    }
+    return outArr;
+  }
+
+  @Override
+  public final List<Integer> decompressIntArray(final List<Integer> inArray) {
+    // Make the output array
+    List<Integer> outArray =  new ArrayList<Integer>();
+    // Loop through the vals
+    for (int i = 0; i < inArray.size(); i += 2) {
+      // Get the value out here
+      int intIn = inArray.get(i);
+      int numOfInt = inArray.get(i + 1);
+      // Now add these to the array
+      for (int j = 0; j < numOfInt; j++) {
+        outArray.add(intIn);
+      }
+    }
+    return outArray;
+  }
 
 }

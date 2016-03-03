@@ -8,259 +8,665 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * A class to store the data sent in an MMTF data source
- * @author anthony
+ * A class to store the data sent in an MMTF data source.
  *
+ * @author anthony
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MmtfBean {
-	
-	// The version of the format
-	private String mmtfVersion = "0.1";
-	// The producer
-	private String mmtfProducer;
-	// The number of bonds
-	private int numBonds;
-	// The PDBCode
-	private String pdbId;
-	// The title of the structure
-	private String title;
-	// Total data for memory allocation
-	private int numAtoms;
-	// Add this to store the model information
-	private int[] internalChainsPerModel;
-	// List to store the chainids
-	private byte[] chainList;
-	// List to store the internal chain ids
-	private byte[] internalChainList;
-	// List to store the number of groups per internal chain
-	private int[] internalGroupsPerChain;
-	// String for the space group
-	private String spaceGroup;
-	// The unit cell information
-	private List<Float> unitCell = new ArrayList<Float>(); 
-	// A map of Bioassembly -> new class so serializable
-	private Map<Integer, BioAssemblyInfoNew> bioAssembly = new HashMap<Integer, BioAssemblyInfoNew>(); 
-	// The bond indices and order 
-	private byte[] bondAtomList;
-	private byte[] bondOrderList;
-	// Map of all the data
-	private  Map<Integer, PDBGroup> groupMap = new HashMap<Integer, PDBGroup>();
-	// For the big arrays split into two -> one of 32 bit ints, one of 16
-	private byte[] xCoordBig;
-	private byte[] yCoordBig;
-	private byte[] zCoordBig;
-	private byte[] bFactorBig;
-	// Now for the small ints -> 16 bit
-	private byte[] xCoordSmall;
-	private byte[] yCoordSmall;
-	private byte[] zCoordSmall;
-	private byte[] bFactorSmall;
-	// The secondary structure -> stored as 8 bit ints
-	private byte[] secStructList;
-	// Run length encoded 
-	private byte[] occList;
-	// Run length encoded
-	private List<String> altLabelList= new ArrayList<String>();
-	// Run length encoded
-	private List<String> insCodeList = new ArrayList<String>();
-	// Delta and run length encoded
-	private byte[] groupTypeList;
-	// Delta and run length
-	private byte[]  groupNumList;
-	// Delta and run length encoded
-	private byte[] atomIdList; 
 
-	public String getSpaceGroup() {
-		return spaceGroup;
-	}
-	public void setSpaceGroup(String spaceGroup) {
-		this.spaceGroup = spaceGroup;
-	}
-	public List<Float> getUnitCell() {
-		return unitCell;
-	}
-	public void setUnitCell(List<Float> unitCell) {
-		this.unitCell = unitCell;
-	}
+  /** The mmtf version. */
+  private String mmtfVersion = "0.1";
 
-	public byte[] getGroupNumList() {
-		return groupNumList;
-	}	
-	public void setGroupNumList(byte[] _atom_site_auth_seq_id) {
-		this.groupNumList = _atom_site_auth_seq_id;
-	}
-	public byte[] getxCoordBig() {
-		return xCoordBig;
-	}
-	public void setxCoordBig(byte[] cartn_x_big) {
-		this.xCoordBig = cartn_x_big;
-	}
-	public byte[] getyCoordBig() {
-		return yCoordBig;
-	}
-	public void setyCoordBig(byte[] cartn_y_big) {
-		this.yCoordBig = cartn_y_big;
-	}
-	public byte[] getzCoordBig() {
-		return zCoordBig;
-	}
-	public void setzCoordBig(byte[] cartn_z_big) {
-		this.zCoordBig = cartn_z_big;
-	}
-	public byte[] getxCoordSmall() {
-		return xCoordSmall;
-	}
-	public void setxCoordSmall(byte[] cartn_x_small) {
-		this.xCoordSmall = cartn_x_small;
-	}
-	public byte[] getyCoordSmall() {
-		return yCoordSmall;
-	}
-	public void setyCoordSmall(byte[] cartn_y_small) {
-		this.yCoordSmall = cartn_y_small;
-	}
-	public byte[] getzCoordSmall() {
-		return zCoordSmall;
-	}
-	public void setzCoordSmall(byte[] cartn_z_small) {
-		this.zCoordSmall = cartn_z_small;
-	}
-	public byte[] getbFactorBig() {
-		return bFactorBig;
-	}
-	public void setbFactorBig(byte[] b_factor_big) {
-		this.bFactorBig = b_factor_big;
-	}
-	public byte[] getbFactorSmall() {
-		return bFactorSmall;
-	}
-	public void setbFactorSmall(byte[] b_factor_small) {
-		this.bFactorSmall = b_factor_small;
-	}
-	public List<String> getAltLabelList() {
-		return altLabelList;
-	}
-	public void setAltLabelList(List<String> _atom_site_label_alt_id) {
-		this.altLabelList = _atom_site_label_alt_id;
-	}
+  /** The mmtf producer. */
+  private String mmtfProducer;
 
-	public Map<Integer, BioAssemblyInfoNew> getBioAssembly() {
-		return bioAssembly;
-	}
-	public byte[] getChainList() {
-		return chainList;
-	}
-	public void setChainList(byte[] chainList) {
-		this.chainList = chainList;
-	}
+  /** The number of bonds. */
+  private int numBonds;
 
-	public void setBioAssembly(Map<Integer, BioAssemblyInfoNew> bioAssembly) {
-		this.bioAssembly = bioAssembly;
-	}
-	public int getNumAtoms() {
-		return numAtoms;
-	}
-	public void setNumAtoms(int numAtoms) {
-		this.numAtoms = numAtoms;
-	}
-	public byte[] getOccList() {
-		return occList;
-	}
-	public void setOccList(byte[] occupancy) {
-		this.occList = occupancy;
-	}
-	public List<String> getInsCodeList() {
-		return insCodeList;
-	}
-	public void setInsCodeList(List<String> _atom_site_pdbx_PDB_ins_code) {
-		this.insCodeList = _atom_site_pdbx_PDB_ins_code;
-	}
-	public Map<Integer, PDBGroup> getGroupMap() {
-		return groupMap;
-	}
-	public void setGroupMap(Map<Integer, PDBGroup> groupMap) {
-		this.groupMap = groupMap;
-	}
-	public byte[] getSecStructList() {
-		return secStructList;
-	}
-	public void setSecStructList(byte[] secStruct) {
-		this.secStructList = secStruct;
-	}
+  /** The pdb id. */
+  private String pdbId;
 
-	public byte[] getGroupTypeList() {
-		return groupTypeList;
-	}
-	public void setGroupTypeList(byte[] resOrder) {
-		this.groupTypeList = resOrder;
-	}
+  /** The title. */
+  private String title;
 
-	public byte[] getAtomIdList() {
-		return atomIdList;
-	}
-	public void setAtomIdList(byte[] _atom_site_id) {
-		this.atomIdList = _atom_site_id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getPdbId() {
-		return pdbId;
-	}
-	public void setPdbId(String pdbCode) {
-		this.pdbId = pdbCode;
-	}
-	public String getMmtfProducer() {
-		return mmtfProducer;
-	}
-	public void setMmtfProducer(String mmtfProducer) {
-		this.mmtfProducer = mmtfProducer;
-	}
-	public String getMmtfVersion() {
-		return mmtfVersion;
-	}
-	public void setMmtfVersion(String mmtfVersion) {
-		this.mmtfVersion = mmtfVersion;
-	}
-	public int getNumBonds() {
-		return numBonds;
-	}
-	public void setNumBonds(int numBonds) {
-		this.numBonds = numBonds;
-	}
-	public byte[] getBondAtomList() {
-		return bondAtomList;
-	}
-	public void setBondAtomList(byte[] bondAtomList) {
-		this.bondAtomList = bondAtomList;
-	}
-	public byte[] getBondOrderList() {
-		return bondOrderList;
-	}
-	public void setBondOrderList(byte[] bondOrderList) {
-		this.bondOrderList = bondOrderList;
-	}
-	public int[] getInternalChainsPerModel() {
-		return internalChainsPerModel;
-	}
-	public void setInternalChainsPerModel(int[] internalChainsPerModel) {
-		this.internalChainsPerModel = internalChainsPerModel;
-	}
-	public int[] getInternalGroupsPerChain() {
-		return internalGroupsPerChain;
-	}
-	public void setInternalGroupsPerChain(int[] internalGroupsPerChain) {
-		this.internalGroupsPerChain = internalGroupsPerChain;
-	}
-	public byte[] getInternalChainList() {
-		return internalChainList;
-	}
-	public void setInternalChainList(byte[] internalChainList) {
-		this.internalChainList = internalChainList;
-	}
+  /** The number of atoms. */
+  private int numAtoms;
+
+  /** The internal chains per model. */
+  private int[] internalChainsPerModel;
+
+  /** The chain list. */
+  private byte[] chainList;
+
+  /** The internal chain list. */
+  private byte[] internalChainList;
+
+  /** The internal groups per chain. */
+  private int[] internalGroupsPerChain;
+
+  /** The space group. */
+  private String spaceGroup;
+
+  /** The unit cell. */
+  private List<Float> unitCell = new ArrayList<Float>();
+
+  /** The bio assembly. */
+  private Map<Integer, BioAssemblyInfoNew> bioAssembly =
+      new HashMap<Integer, BioAssemblyInfoNew>();
+
+  /** The bond atom (indices) list. */
+  private byte[] bondAtomList;
+
+  /** The bond order list. */
+  private byte[] bondOrderList;
+
+  /** The group map. */
+  // Map of all the data
+  private  Map<Integer, PDBGroup> groupMap = new HashMap<Integer, PDBGroup>();
+
+  /** The x coord big. 4 byte integers in pairs. */
+  private byte[] xCoordBig;
+
+  /** The y coord big. 4 byte integers in pairs. */
+  private byte[] yCoordBig;
+
+  /** The z coord big. 4 byte integers in pairs. */
+  private byte[] zCoordBig;
+
+  /** The b factor big. 4 byte integers in pairs. */
+  private byte[] bFactorBig;
+
+  /** The x coord small. 2 byte integers. */
+  private byte[] xCoordSmall;
+
+  /** The y coord small. 2 byte integers.*/
+  private byte[] yCoordSmall;
+
+  /** The z coord small. 2 byte integers.*/
+  private byte[] zCoordSmall;
+
+  /** The b factor small. 2 byte integers.*/
+  private byte[] bFactorSmall;
+
+  /** The secondary structure list. Stored as 1 byte ints. */
+  private byte[] secStructList;
+
+  /** The occupancy list. */
+  private byte[] occList;
+
+  /** The alt label list. */
+  private List<String> altLabelList = new ArrayList<String>();
+
+  /** The insertion code list. */
+  private List<String> insCodeList = new ArrayList<String>();
+
+  /** The group type list. */
+  private byte[] groupTypeList;
+
+  /** The group num list. */
+  private byte[]  groupNumList;
+
+  /** The atom id list. */
+  private byte[] atomIdList;
+
+  /**
+   * Gets the space group.
+   *
+   * @return the space group
+   */
+  public final String getSpaceGroup() {
+    return spaceGroup;
+  }
+
+  /**
+   * Sets the space group.
+   *
+   * @param inputSpaceGroup the new space group
+   */
+  public final void setSpaceGroup(final String inputSpaceGroup) {
+    this.spaceGroup = inputSpaceGroup;
+  }
+
+  /**
+   * Gets the unit cell.
+   *
+   * @return the unit cell
+   */
+  public final List<Float> getUnitCell() {
+    return unitCell;
+  }
+
+  /**
+   * Sets the unit cell.
+   *
+   * @param inputUnitCell the new unit cell
+   */
+  public final void setUnitCell(final List<Float> inputUnitCell) {
+    this.unitCell = inputUnitCell;
+  }
+
+  /**
+   * Gets the group num list.
+   *
+   * @return the group num list
+   */
+  public final byte[] getGroupNumList() {
+    return groupNumList;
+  }
+
+  /**
+   * Sets the group num list.
+   *
+   * @param inputGroupNumList the new group num list
+   */
+  public final void setGroupNumList(final byte[] inputGroupNumList) {
+    this.groupNumList = inputGroupNumList;
+  }
+
+  /**
+   * Gets the x coord big.
+   *
+   * @return the x coord big
+   */
+  public final byte[] getxCoordBig() {
+    return xCoordBig;
+  }
+
+  /**
+   * Sets the x coord big.
+   *
+   * @param inputXCoordBig the new 4 byte integer x coord array
+   */
+  public final void setxCoordBig(final byte[] inputXCoordBig) {
+    this.xCoordBig = inputXCoordBig;
+  }
+
+  /**
+   * Gets the y coord big.
+   *
+   * @return the y coord big
+   */
+  public final byte[] getyCoordBig() {
+    return yCoordBig;
+  }
+
+  /**
+   * Sets the y coord big.
+   *
+   * @param inputYCoordBig the new 4 byte integer y coord array
+   */
+  public final void setyCoordBig(final byte[] inputYCoordBig) {
+    this.yCoordBig = inputYCoordBig;
+  }
+
+  /**
+   * Gets the z coord big.
+   *
+   * @return the z coord big
+   */
+  public final byte[] getzCoordBig() {
+    return zCoordBig;
+  }
+
+  /**
+   * Sets the z coord big.
+   *
+   * @param inputZCoordBig the new 4 byte integer z coord array
+   */
+  public final void setzCoordBig(final byte[] inputZCoordBig) {
+    this.zCoordBig = inputZCoordBig;
+  }
+
+  /**
+   * Gets the x coord small.
+   *
+   * @return the x coord small
+   */
+  public final byte[] getxCoordSmall() {
+    return xCoordSmall;
+  }
+
+  /**
+   * Sets the x coord small.
+   *
+   * @param inputXCoordSmall the new 2 byte integer x coord array
+   */
+  public final void setxCoordSmall(final byte[] inputXCoordSmall) {
+    this.xCoordSmall = inputXCoordSmall;
+  }
+
+  /**
+   * Gets the y coord small.
+   *
+   * @return the y coord small
+   */
+  public final byte[] getyCoordSmall() {
+    return yCoordSmall;
+  }
+
+  /**
+   * Sets the y coord small.
+   *
+   * @param inputYCoordSmall the new 2 byte integer y coord array
+   */
+  public final void setyCoordSmall(final byte[] inputYCoordSmall) {
+    this.yCoordSmall = inputYCoordSmall;
+  }
+
+  /**
+   * Gets the z coord small.
+   *
+   * @return the z coord small
+   */
+  public final byte[] getzCoordSmall() {
+    return zCoordSmall;
+  }
+
+  /**
+   * Sets the z coord small.
+   *
+   * @param inputZCoordSmall the new 2 byte integer z coord array
+   */
+  public final void setzCoordSmall(final byte[] inputZCoordSmall) {
+    this.zCoordSmall = inputZCoordSmall;
+  }
+
+  /**
+   * Gets the b factor big.
+   *
+   * @return the b factor big
+   */
+  public final byte[] getbFactorBig() {
+    return bFactorBig;
+  }
+
+  /**
+   * Sets the b factor big.
+   *
+   * @param inputBigBFactor the new b factor big
+   */
+  public final void setbFactorBig(final byte[] inputBigBFactor) {
+    this.bFactorBig = inputBigBFactor;
+  }
+
+  /**
+   * Gets the b factor small.
+   *
+   * @return the b factor small
+   */
+  public final byte[] getbFactorSmall() {
+    return bFactorSmall;
+  }
+
+  /**
+   * Sets the b factor small.
+   *
+   * @param inputSmallBFactor the new b factor 2 byte array
+   */
+  public final void setbFactorSmall(final byte[] inputSmallBFactor) {
+    this.bFactorSmall = inputSmallBFactor;
+  }
+
+  /**
+   * Gets the alt label list.
+   *
+   * @return the alt label list
+   */
+  public final List<String> getAltLabelList() {
+    return altLabelList;
+  }
+
+  /**
+   * Sets the alt label list.
+   *
+   * @param inputAltIdList the new alt id label list
+   */
+  public final void setAltLabelList(final List<String> inputAltIdList) {
+    this.altLabelList = inputAltIdList;
+  }
+
+  /**
+   * Gets the bio assembly.
+   *
+   * @return the bio assembly
+   */
+  public final Map<Integer, BioAssemblyInfoNew> getBioAssembly() {
+    return bioAssembly;
+  }
+
+  /**
+   * Gets the chain list.
+   *
+   * @return the chain list
+   */
+  public final byte[] getChainList() {
+    return chainList;
+  }
+
+  /**
+   * Sets the chain list.
+   *
+   * @param inputChainList the new chain list
+   */
+  public final void setChainList(final byte[] inputChainList) {
+    this.chainList = inputChainList;
+  }
+
+  /**
+   * Sets the bio assembly.
+   *
+   * @param inputBioAssembly the bio assembly
+   */
+  public final void setBioAssembly(final Map<Integer,
+      BioAssemblyInfoNew> inputBioAssembly) {
+    this.bioAssembly = inputBioAssembly;
+  }
+
+  /**
+   * Gets the num atoms.
+   *
+   * @return the num atoms
+   */
+  public final int getNumAtoms() {
+    return numAtoms;
+  }
+
+  /**
+   * Sets the num atoms.
+   *
+   * @param inputNumAtoms the new num atoms
+   */
+  public final void setNumAtoms(final int inputNumAtoms) {
+    this.numAtoms = inputNumAtoms;
+  }
+
+  /**
+   * Gets the occ list.
+   *
+   * @return the occ list
+   */
+  public final byte[] getOccList() {
+    return occList;
+  }
+
+  /**
+   * Sets the occ list.
+   *
+   * @param occupancy the new occ list
+   */
+  public final void setOccList(final byte[] occupancy) {
+    this.occList = occupancy;
+  }
+
+  /**
+   * Gets the insertion code list.
+   *
+   * @return the insertion code list
+   */
+  public final List<String> getInsCodeList() {
+    return insCodeList;
+  }
+
+  /**
+   * Sets the ins code list.
+   *
+   * @param inputInsertionCodeList the new insertion code list
+   */
+  public final void setInsCodeList(final List<String> inputInsertionCodeList) {
+    this.insCodeList = inputInsertionCodeList;
+  }
+
+  /**
+   * Gets the group map.
+   *
+   * @return the group map
+   */
+  public final Map<Integer, PDBGroup> getGroupMap() {
+    return groupMap;
+  }
+
+  /**
+   * Sets the group map.
+   *
+   * @param inputGroupMap the group map
+   */
+  public final void setGroupMap(final Map<Integer, PDBGroup> inputGroupMap) {
+    this.groupMap = inputGroupMap;
+  }
+
+  /**
+   * Gets the sec struct list.
+   *
+   * @return the sec struct list
+   */
+  public final byte[] getSecStructList() {
+    return secStructList;
+  }
+
+  /**
+   * Sets the sec struct list.
+   *
+   * @param secStruct the new sec struct list
+   */
+  public final void setSecStructList(final byte[] secStruct) {
+    this.secStructList = secStruct;
+  }
+
+  /**
+   * Gets the group type list.
+   *
+   * @return the group type list
+   */
+  public final byte[] getGroupTypeList() {
+    return groupTypeList;
+  }
+
+  /**
+   * Sets the group type list.
+   *
+   * @param resOrder the new group type list
+   */
+  public final void setGroupTypeList(final byte[] resOrder) {
+    this.groupTypeList = resOrder;
+  }
+
+  /**
+   * Gets the atom id list.
+   *
+   * @return the atom id list
+   */
+  public final byte[] getAtomIdList() {
+    return atomIdList;
+  }
+
+  /**
+   * Sets the atom id list.
+   *
+   * @param inputAtomIdList the new atom id list
+   */
+  public final void setAtomIdList(final byte[] inputAtomIdList) {
+    this.atomIdList = inputAtomIdList;
+  }
+
+  /**
+   * Gets the title.
+   *
+   * @return the title
+   */
+  public final String getTitle() {
+    return title;
+  }
+
+  /**
+   * Sets the title.
+   *
+   * @param inputTitle the new title
+   */
+  public final void setTitle(final String inputTitle) {
+    this.title = inputTitle;
+  }
+
+  /**
+   * Gets the pdb id.
+   *
+   * @return the pdb id
+   */
+  public final String getPdbId() {
+    return pdbId;
+  }
+
+  /**
+   * Sets the pdb id.
+   *
+   * @param pdbCode the new pdb id
+   */
+  public final void setPdbId(final String pdbCode) {
+    this.pdbId = pdbCode;
+  }
+
+  /**
+   * Gets the mmtf producer.
+   *
+   * @return the mmtf producer
+   */
+  public final String getMmtfProducer() {
+    return mmtfProducer;
+  }
+
+  /**
+   * Sets the mmtf producer.
+   *
+   * @param inputMmtfProducer the new mmtf producer
+   */
+  public final void setMmtfProducer(final String inputMmtfProducer) {
+    this.mmtfProducer = inputMmtfProducer;
+  }
+
+  /**
+   * Gets the mmtf version.
+   *
+   * @return the mmtf version
+   */
+  public final String getMmtfVersion() {
+    return mmtfVersion;
+  }
+
+  /**
+   * Sets the mmtf version.
+   *
+   * @param inputMmtfVersion the new mmtf version
+   */
+  public final void setMmtfVersion(final String inputMmtfVersion) {
+    this.mmtfVersion = inputMmtfVersion;
+  }
+
+  /**
+   * Gets the num bonds.
+   *
+   * @return the num bonds
+   */
+  public final int getNumBonds() {
+    return numBonds;
+  }
+
+  /**
+   * Sets the number of bonds.
+   *
+   * @param inputNumBonds the new num bonds
+   */
+  public final void setNumBonds(final int inputNumBonds) {
+    this.numBonds = inputNumBonds;
+  }
+
+  /**
+   * Gets the bond atom list.
+   *
+   * @return the bond atom list
+   */
+  public final byte[] getBondAtomList() {
+    return bondAtomList;
+  }
+
+  /**
+   * Sets the bond atom list.
+   *
+   * @param inputBondAtomList the new bond atom list
+   */
+  public final void setBondAtomList(final byte[] inputBondAtomList) {
+    this.bondAtomList = inputBondAtomList;
+  }
+
+  /**
+   * Gets the bond order list.
+   *
+   * @return the bond order list
+   */
+  public final byte[] getBondOrderList() {
+    return bondOrderList;
+  }
+
+  /**
+   * Sets the bond order list.
+   *
+   * @param inputBondOrderList the new bond order list
+   */
+  public final void setBondOrderList(final byte[] inputBondOrderList) {
+    this.bondOrderList = inputBondOrderList;
+  }
+
+  /**
+   * Gets the internal chains per model.
+   *
+   * @return the internal chains per model
+   */
+  public final int[] getInternalChainsPerModel() {
+    return internalChainsPerModel;
+  }
+
+  /**
+   * Sets the internal chains per model.
+   *
+   * @param inputInternalChainsPerModel the new internal chains per model
+   */
+  public final void setInternalChainsPerModel(final int[] inputInternalChainsPerModel) {
+    this.internalChainsPerModel = inputInternalChainsPerModel;
+  }
+
+  /**
+   * Gets the internal groups per chain.
+   *
+   * @return the internal groups per chain
+   */
+  public final int[] getInternalGroupsPerChain() {
+    return internalGroupsPerChain;
+  }
+
+  /**
+   * Sets the internal groups per chain.
+   *
+   * @param inputInternalGroupsPerChain the new internal groups per chain
+   */
+  public final void setInternalGroupsPerChain(final int[] inputInternalGroupsPerChain) {
+    this.internalGroupsPerChain = inputInternalGroupsPerChain;
+  }
+
+  /**
+   * Gets the internal chain list.
+   *
+   * @return the internal chain list
+   */
+  public final byte[] getInternalChainList() {
+    return internalChainList;
+  }
+
+  /**
+   * Sets the internal chain list.
+   *
+   * @param inputInternalChainList the new internal chain list
+   */
+  public final void setInternalChainList(final byte[] inputInternalChainList) {
+    this.internalChainList = inputInternalChainList;
+  }
 
 }
