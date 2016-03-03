@@ -56,13 +56,13 @@ Serializable {
   /** The group. */
   private Group group;
 
-  /** The tot group. */
-  private List<Atom> totGroup;
+  /** The atoms in a group. */
+  private List<Atom> atomsInGroup;
 
-  /** The cc. */
-  private ChemComp cc;
+  /** The chemical component group. */
+  private ChemComp chemicalComponentGroup;
 
-  /** The all atoms. */
+  /** All the atoms. */
   private List<Atom> allAtoms;
 
   /**
@@ -71,7 +71,7 @@ Serializable {
   public BioJavaStructureDecoder() {
     structure = new StructureImpl();
     modelNumber = 0;
-    cc = new ChemComp();
+    chemicalComponentGroup = new ChemComp();
     allAtoms  = new ArrayList<Atom>();
   }
 
@@ -133,9 +133,9 @@ Serializable {
     default:
       group = new HetatomImpl();
     }
-    totGroup = new ArrayList<Atom>();
+    atomsInGroup = new ArrayList<Atom>();
     // Set the CC -> empty but not null
-    group.setChemComp(cc);
+    group.setChemComp(chemicalComponentGroup);
     group.setPDBName(groupName);
     if (insertionCode == '?') {
       group.setResidueNumber(chain.getChainID().trim(), groupNumber, null);
@@ -192,7 +192,7 @@ Serializable {
     if (!group.hasAtom(atom.getName())) {
       group.addAtom(atom);
     }
-    totGroup.add(atom);
+    atomsInGroup.add(atom);
     allAtoms.add(atom);
   }
 
@@ -204,8 +204,8 @@ Serializable {
   public final void setGroupBonds(final int indOne,
       final int indTwo, final int bondOrder) {
     // Get the atom
-    Atom atomOne = totGroup.get(indOne);
-    Atom atomTwo = totGroup.get(indTwo);
+    Atom atomOne = atomsInGroup.get(indOne);
+    Atom atomTwo = atomsInGroup.get(indTwo);
     // set the new bond
     @SuppressWarnings("unused")
     BondImpl bond = new BondImpl(atomOne, atomTwo, bondOrder);
