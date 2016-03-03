@@ -28,15 +28,11 @@ public class MmtfBean {
 	// Total data for memory allocation
 	private int numAtoms;
 	// Add this to store the model information
-	private int[] chainsPerModel;
-	// Add this to store the model information
 	private int[] internalChainsPerModel;
 	// List to store the chainids
 	private byte[] chainList;
 	// List to store the internal chain ids
 	private byte[] internalChainList;
-	// List to store the number of groups per chain
-	private int[] groupsPerChain;
 	// List to store the number of groups per internal chain
 	private int[] internalGroupsPerChain;
 	// String for the space group
@@ -152,28 +148,16 @@ public class MmtfBean {
 	public Map<Integer, BioAssemblyInfoNew> getBioAssembly() {
 		return bioAssembly;
 	}
-	public int[] getChainsPerModel() {
-		return chainsPerModel;
-	}
-	public void setChainsPerModel(int[] chainsPerModel) {
-		this.chainsPerModel = chainsPerModel;
-	}
 	public byte[] getChainList() {
 		return chainList;
 	}
 	public void setChainList(byte[] chainList) {
 		this.chainList = chainList;
 	}
-	public int[] getGroupsPerChain() {
-		return groupsPerChain;
-	}
-	public void setGroupsPerChain(int[] groupsPerChain) {
-		this.groupsPerChain = groupsPerChain;
-	}
+
 	public void setBioAssembly(Map<Integer, BioAssemblyInfoNew> bioAssembly) {
 		this.bioAssembly = bioAssembly;
 	}
-
 	public int getNumAtoms() {
 		return numAtoms;
 	}

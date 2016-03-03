@@ -264,4 +264,16 @@ public class BioJavaStructureDecoder implements StructureDecoderInterface, Seria
 			structure.setCrystallographicInfo(pci);
 		}
 	}
+
+	@Override
+	public void updateChainInfo(String chainId, int groupCount) {
+		// 
+		for(Chain c: structure.getChains(modelNumber)){
+			if(c.getChainID().equals(chainId)){
+				chain = c;
+				break;
+			}
+		}
+		
+	}
 }
