@@ -114,10 +114,10 @@ public class DecodeStructure {
         inputData.getbFactorSmall());
     occupancyArr = intRunLength.decompressByteArray(inputData.getOccList());
     atomId = intRunLengthDelta.decompressByteArray(inputData.getAtomIdList());
-    altId = stringRunlength.deCompressStringArrayToChar(
+    altId = stringRunlength.stringArrayToChar(
         (ArrayList<String>) inputData.getAltLabelList());
     // Get the insertion code
-    insCode = stringRunlength.deCompressStringArrayToChar(
+    insCode = stringRunlength.stringArrayToChar(
         (ArrayList<String>) inputData.getInsCodeList());
     // Get the groupNumber
     groupNum = intRunLengthDelta.decompressByteArray(

@@ -17,15 +17,17 @@ public class RunLengthDecodeInt implements IntArrayDeCompressorInterface {
    * The number of bytes in a four byte integers.
    */
   private static final int BIG_INT_BYTES = 4;
+
   /**
    * Decompress a byte array that is run length encoded.
-   * @param inArray
-   * @return
-   * @throws IOException
-   * @return int[]
+   * @param inArray The input byte array. Integers as 4 bytes long
+   * @return The decompressed integer array
+   * @throws IOException The byte array does not contain the
+   * information requested.
    */
-  public final int[] decompressByteArray(final byte[] inArray) throws IOException {
-
+  public final int[] decompressByteArray(final byte[] inArray)
+      throws IOException {
+    // The length of each of the 4 byte integer arrays
     int lengthOfBigIntArr = inArray.length / (BIG_INT_BYTES * 2);
     // Array to store all the different numbers
     int[] numArr = new int[lengthOfBigIntArr];

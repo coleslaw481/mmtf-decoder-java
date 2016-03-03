@@ -18,10 +18,11 @@ import java.util.List;
  * @author Andreas Prlic
  * @author rickb
  * @author duarte_j
- * @author anthony
+ * @author Anthony Bradley
  * @see CrystalTransform
  */
-public class BiologicalAssemblyTransformationNew implements Cloneable, Serializable {
+public class BiologicalAssemblyTransformationNew implements Cloneable,
+Serializable {
 
 
   /** The Constant serialVersionUID. */

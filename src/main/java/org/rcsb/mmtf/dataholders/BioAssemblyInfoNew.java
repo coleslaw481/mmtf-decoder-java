@@ -52,10 +52,11 @@ public class BioAssemblyInfoNew {
   /**
    * Sets the transforms.
    *
-   * @param transforms the new transforms
+   * @param inputTransforms the new transforms
    */
-  public final void setTransforms(final List<BiologicalAssemblyTransformationNew> transforms) {
-    this.transforms = transforms;
+  public final void setTransforms(final
+      List<BiologicalAssemblyTransformationNew> inputTransforms) {
+    this.transforms = inputTransforms;
   }
 
   /**

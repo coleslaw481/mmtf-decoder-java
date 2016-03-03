@@ -20,12 +20,14 @@ public class DeltaDeCompress {
   private static final int BIG_INT_BYTES = 4;
   /**
    * Decompress two byte arrays - one containing 4 byte and one 2 byte integers.
-   * @param fourByteInts
-   * @param twoByteInts
-   * @return
-   * @throws IOException
+   * @param fourByteInts An array of four byte integers.
+   * @param twoByteInts An array of two byte integers.
+   * @return A decompressed integer array.
+   * @throws IOException The byte array does not contain
+   * the information requested.
    */
-  public final int[] decompressByteArray(final byte[] fourByteInts, final byte[] twoByteInts) throws IOException {
+  public final int[] decompressByteArray(final byte[] fourByteInts,
+      final byte[] twoByteInts) throws IOException {
     // Get these data streams
     DataInputStream bigStream = new DataInputStream(new
         ByteArrayInputStream(fourByteInts));

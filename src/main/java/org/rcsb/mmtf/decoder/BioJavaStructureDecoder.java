@@ -326,7 +326,7 @@ Serializable {
     PDBCrystallographicInfo pci = new PDBCrystallographicInfo();
     SpaceGroup spaceGroup = SpaceGroup.parseSpaceGroup(spaceGroupString);
     pci.setSpaceGroup(spaceGroup);
-    if(unitCell.size()==6){
+    if (unitCell.size() > 0) {
       CrystalCell cell = new CrystalCell(unitCell.get(0), unitCell.get(1),
           unitCell.get(2), unitCell.get(3), unitCell.get(4), unitCell.get(5));
       pci.setCrystalCell(cell);

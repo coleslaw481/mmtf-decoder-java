@@ -71,16 +71,20 @@ public interface StructureDecoderInterface {
   /**
    * Sets the Bioassembly information for the structure.
    *
-   * @param keyList the key list
-   * @param sizeList the size list
-   * @param inputIds the input ids
-   * @param inputChainIds the input chain ids
-   * @param inputTransformations the input transformations
+   * @param keyToIndexMap mapping the id of the bioassembly to its name
+   * @param sizeMap mapping the id of the bioassembly to it's size
+   * @param bioAssemblyToIdsMap maps the bioassembly to the
+   * ids of the transformations
+   * @param bioassemblyToChainIdsMap the map of bioassembly
+   * to the list of chain ids considered
+   * @param bioassemblyToTransformationsMap the map of bioassembly
+   * to the list of transformations
    */
-  void setBioAssembly(Map<Integer, Integer> keyList, Map<Integer,
-      Integer> sizeList, Map<Integer, List<String>> inputIds, Map<Integer,
-      List<String>> inputChainIds, Map<Integer, List<double[]>>
-  inputTransformations);
+  void setBioAssembly(Map<Integer, Integer> keyToIndexMap, Map<Integer,
+      Integer> sizeMap, Map<Integer, List<String>> bioAssemblyToIdsMap,
+      Map<Integer,
+      List<String>> bioassemblyToChainIdsMap, Map<Integer, List<double[]>>
+  bioassemblyToTransformationsMap);
 
   /**
    * Sets the space group and unit cell information.

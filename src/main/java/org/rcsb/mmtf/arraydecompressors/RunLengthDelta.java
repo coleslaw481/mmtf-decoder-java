@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Functions to decompress input arrays using delta and run
  * length decoding.
- * The input is first run lenght decoded and then delta decoded.
+ * The input is first run length decoded and then delta decoded.
  * This is particularly useful for sequential numbers.
  * @author Anthony Bradley
  *
@@ -22,11 +22,12 @@ public class RunLengthDelta {
 
   /**
    * Decompress a byte a byte array  using run length and delta decoding.
-   * @param inArray
-   * @return
-   * @throws IOException
+   * @param inArray The input byte array
+   * @return A decompressed array of integers.
+   * @throws IOException If no more data can be read from the byte array.
    */
-  public final int[] decompressByteArray(final byte[] inArray) throws IOException {
+  public final int[] decompressByteArray(final byte[] inArray)
+      throws IOException {
     // The length of the array
     int lengthOfBigIntArr = inArray.length / (BIG_INT_BYTES * 2);
     // Array to store all the different numbers

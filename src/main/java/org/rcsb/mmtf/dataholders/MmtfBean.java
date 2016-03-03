@@ -629,7 +629,8 @@ public class MmtfBean {
    *
    * @param inputInternalChainsPerModel the new internal chains per model
    */
-  public final void setInternalChainsPerModel(final int[] inputInternalChainsPerModel) {
+  public final void setInternalChainsPerModel(final int[]
+      inputInternalChainsPerModel) {
     this.internalChainsPerModel = inputInternalChainsPerModel;
   }
 
@@ -647,7 +648,8 @@ public class MmtfBean {
    *
    * @param inputInternalGroupsPerChain the new internal groups per chain
    */
-  public final void setInternalGroupsPerChain(final int[] inputInternalGroupsPerChain) {
+  public final void setInternalGroupsPerChain(final int[]
+      inputInternalGroupsPerChain) {
     this.internalGroupsPerChain = inputInternalGroupsPerChain;
   }
 
