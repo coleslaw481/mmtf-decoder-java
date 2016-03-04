@@ -35,11 +35,9 @@ public class PDBGroup implements Serializable {
   private List<Integer> bondIndices;
 
   /** The atom charges. */
-  // The atomic charges of these atoms
   private List<Integer> atomCharges;
 
   /** The single letter code. */
-  // The single letter code
   private String singleLetterCode;
 
   /**
