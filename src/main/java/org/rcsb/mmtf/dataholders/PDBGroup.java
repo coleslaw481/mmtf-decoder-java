@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.biojava.nbio.structure.io.PDBFileParser;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
