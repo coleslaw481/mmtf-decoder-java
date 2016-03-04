@@ -17,7 +17,7 @@ import static org.junit.Assert.assertArrayEquals;
 
 
 
-public class DecoderUtilsTests {
+public class TestDecoderUtils {
   
   private static final int NUM_EXAMPLES = 100;
   private static final int MAX_CHARS_PER_CHAIN = 4;

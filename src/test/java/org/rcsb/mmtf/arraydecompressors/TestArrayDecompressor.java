@@ -19,7 +19,7 @@ import static org.junit.Assert.assertArrayEquals;
  * @author Anthony Bradley
  *
  */
-public class ArrayDecompressorTests {
+public class TestArrayDecompressor {
 
 
   /** The Constant NUMBER_INTS. */
