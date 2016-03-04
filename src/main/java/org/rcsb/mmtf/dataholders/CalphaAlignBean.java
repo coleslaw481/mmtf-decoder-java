@@ -10,17 +10,22 @@ import javax.vecmath.Point3d;
  */
 public class CalphaAlignBean {
 
-  /** The pdb id. */
+  /** The pdb id. Four letter code. */
   private String pdbId;
 
-  /** The chain id. */
+  /** The chain id. Specified by the asym id. */
   private String chainId;
 
-  /** The polymer type. */
+  /** The polymer type. DNA/RNA or Amino acid. */
   private String polymerType;
 
-  /** The sequence. */
-  private char[] sequence;
+  /** The sequence of all atoms in the construct (not just those resolved by the data). */
+  private String sequence;
+  
+  /** The mapping of group to the sequence. Same length as point 3d id and indicates the position that
+   * corresponds to that  position on the sequence. 
+   */
+  private int[] sequenceToCoordMap;
 
   /** The coordinate list. */
   private Point3d[] coordList;
@@ -81,20 +86,21 @@ public class CalphaAlignBean {
   }
 
   /**
-   * Gets the sequence.
+   * Gets the sequence of all atoms in the construct (not just those resolved by the data).
    *
-   * @return the sequence
+   * @return the sequence of all atoms in the construct (not just those resolved by the data)
    */
-  public final char[] getSequence() {
+  public final String getSequence() {
     return sequence;
   }
 
   /**
-   * Sets the sequence.
+   * Sets the sequence of all atoms in the construct (not just those resolved by the data).
    *
-   * @param inputSequence the new sequence
+   * @param inputSequence the sequence of all atoms in the construct (not just those resolved by the data).
+   * A char[]
    */
-  public final void setSequence(final char[] inputSequence) {
+  public final void setSequence(final String inputSequence) {
     this.sequence = inputSequence;
   }
 
@@ -114,6 +120,22 @@ public class CalphaAlignBean {
    */
   public final void setCoordList(final Point3d[] inputCoordList) {
     this.coordList = inputCoordList;
+  }
+
+  /**
+   * @return the sequenceToCoordMap
+   */
+  public int[] getSequenceToCoordMap() {
+    return sequenceToCoordMap;
+  }
+
+  /**
+   * @param sequenceToCoordMap the mapping of the position in the Point3d array to the position on the sequence. The array
+   * is the same length as the point3d array and contains numbers within the range -1 (no position) to the length of the sequence 
+   * -1 (the end of the sequence). The list is 0 indexed.
+   */
+  public void setSequenceToCoordMap(int[] sequenceToCoordMap) {
+    this.sequenceToCoordMap = sequenceToCoordMap;
   }
 
 

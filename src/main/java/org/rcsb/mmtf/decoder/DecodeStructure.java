@@ -124,7 +124,10 @@ public class DecodeStructure {
   /** A unique set of lists for each model */
   private Set<String> chainIdSet;
   
-  // TODO Create a list of all the nucleic acid ids
+  /** The sequence information. An entry for each chain. In a list.  */
+  private List<String> sequenceInfo;
+  
+  
   /** A list containing pdb group names for nucleic acids */
   List<String> nucAcidList = new ArrayList<>();
   
@@ -496,6 +499,7 @@ public class DecodeStructure {
     bioAssembly  = inputData.getBioAssembly();
     interGroupBondIndices = decoderUtils.bytesToInts(inputData.getBondAtomList());
     interGroupBondOrders = decoderUtils.bytesToByteInts(inputData.getBondOrderList());
+    sequenceInfo = inputData.getSequence();
   }
 
   /**
@@ -724,6 +728,20 @@ public class DecodeStructure {
     // Set the bioassembly information
     structInflator.setBioAssembly(keyList, sizeList,
         inputIds, inputChainIds, inputTransformations);    
+  }
+
+  /**
+   * @return the sequenceInfo
+   */
+  public List<String> getSequenceInfo() {
+    return sequenceInfo;
+  }
+
+  /**
+   * @param sequenceInfo the sequenceInfo to set
+   */
+  public void setSequenceInfo(List<String> sequenceInfo) {
+    this.sequenceInfo = sequenceInfo;
   }
 
 
