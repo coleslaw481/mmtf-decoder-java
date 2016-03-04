@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 import org.rcsb.mmtf.arraydecompressors.DeltaDeCompress;
@@ -72,7 +73,7 @@ public class DecodeStructure {
   private int[] groupList;
 
   /** The last count. */
-  private int lastCount;
+  private int lastAtomCount;
 
   /** The sequence ids of the groups */
   private int[] seqResGroupList;
@@ -103,6 +104,28 @@ public class DecodeStructure {
   
   /** The bond orders for bonds between groups*/
   private int[] interGroupBondOrders;
+  
+  /** The chosen list of chain ids */
+  private String[] chainList;
+  
+  /** The counter for the models */
+  private int modelCounter;
+  
+  /** The counter for the groups (residues) */
+  private int groupCounter;
+  
+  /** The counter for the chains */
+  private int chainCounter;
+  
+  /** The counter for atoms in a group */
+  private int atomCounter;
+  
+  /** A unique set of lists for each model */
+  private Set<String> chainIdSet;
+  
+  // TODO Create a list of all the nucleic acid ids
+  /** A list containing pdb group names for nucleic acids */
+  List<String> nucAcidList = new ArrayList<>();
   
   /**
    * @return the spaceGroup
@@ -361,14 +384,14 @@ public class DecodeStructure {
    * @return the lastCount
    */
   public int getLastCount() {
-    return lastCount;
+    return lastAtomCount;
   }
 
   /**
    * @param lastCount the lastCount to set
    */
   public void setLastCount(int lastCount) {
-    this.lastCount = lastCount;
+    this.lastAtomCount = lastCount;
   }
 
   /**
@@ -394,6 +417,34 @@ public class DecodeStructure {
   }
   
   /**
+   * @return the internalChainIds
+   */
+  public String[] getInternalChainIds() {
+    return internalChainIds;
+  }
+
+  /**
+   * @param internalChainIds the internalChainIds to set
+   */
+  public void setInternalChainIds(String[] internalChainIds) {
+    this.internalChainIds = internalChainIds;
+  }
+
+  /**
+   * @return the publicChainIds
+   */
+  public String[] getPublicChainIds() {
+    return publicChainIds;
+  }
+
+  /**
+   * @param publicChainIds the publicChainIds to set
+   */
+  public void setPublicChainIds(String[] publicChainIds) {
+    this.publicChainIds = publicChainIds;
+  }
+  
+  /**
    * The constructor requires a byte array to fill the data
    * @param inputByteArr
    * @throws JsonParseException
@@ -401,7 +452,7 @@ public class DecodeStructure {
    * @throws IOException
    */
   public DecodeStructure(byte[] inputByteArr) throws JsonParseException, JsonMappingException, IOException{
-    // Get the decompression
+    // Get the decompressors to build in the data structure
     DeltaDeCompress deltaDecompress = new DeltaDeCompress();
     RunLengthDelta intRunLengthDelta = new RunLengthDelta();
     RunLengthDecodeInt intRunLength = new RunLengthDecodeInt();
@@ -437,30 +488,15 @@ public class DecodeStructure {
     chainsPerModel = inputData.getInternalChainsPerModel();
     groupsPerChain = inputData.getInternalGroupsPerChain();
     // Get the internal and public facing chain ids
-    publicChainIds = decodeChainList(inputData.getChainList());
-    internalChainIds = decodeChainList(inputData.getInternalChainList());
+    publicChainIds = decoderUtils.decodeChainList(inputData.getChainList());
+    internalChainIds = decoderUtils.decodeChainList(inputData.getInternalChainList());
     spaceGroup = inputData.getSpaceGroup();
     unitCell = inputData.getUnitCell();
     bioAssembly  = inputData.getBioAssembly();
     interGroupBondIndices = decoderUtils.bytesToInts(inputData.getBondAtomList());
     interGroupBondOrders = decoderUtils.bytesToByteInts(inputData.getBondOrderList());
-    
   }
 
-  /**
-   * Decode chain ids from byte arrays
-   * @param currentChainList the byte array of the chain list input. Each chain takes up 4 bytes.
-   * @return the string array of the parsed chain ids
-   */
-  private String[] decodeChainList(byte[] currentChainList) {
-    DecoderUtils decoderUtils = new DecoderUtils();
-    int outputLength = currentChainList.length/4;
-    String[] outputArr = new String[outputLength];
-    for (int i = 0; i < outputLength; i++){
-      outputArr[i] = decoderUtils.getChainId(currentChainList, i);
-    }
-    return outputArr;
-  }
   /**
    * Generate a structure from bytes using a structure inflator.
    *
@@ -470,54 +506,187 @@ public class DecodeStructure {
    * @throws IOException Signals that an I/O exception has occurred.
    */
   public final void getStructFromByteArray(final StructureDecoderInterface inputStructInflator,
-      final ParsingParams parsingParams) throws IOException {
-
-    // TODO Create a list of all the nucleic acid ids
-    List<String> nucAcidList = new ArrayList<>();
+      final ParsingParams parsingParams) throws IOException {    
     // Set the inflator
     structInflator = inputStructInflator;
-    // GET THE MODEL LIST AND THE CHAIN MAP
-    String[] chainList;
+    useParseParams(parsingParams);
+    // Now get the group map
+    for (int modelChains: chainsPerModel) {
+      structInflator.setModelInfo(modelCounter, modelChains);
+      // A list to check if we need to set or update the chains
+      chainIdSet = new HashSet<>();
+      int totChainsThisModel = chainCounter + modelChains;
+      for (int chainIndex = chainCounter; chainIndex < totChainsThisModel;  chainIndex++) {
+        addOrUpdateChainInfo(chainIndex);
+        chainCounter++;
+      }
+      modelCounter++;
+    }
+    // Now set the crystallographic  information
+    addXtalographicInfo();
+    /// Now get the bioassembly information
+    generateBioAssembly();
+    // Now add the other bonds between groups
+    addInterGroupBonds();
+
+  }
+   
+  /**
+   * Use the parsing parameters to set the scene.
+   * @param parsingParams
+   */
+  private void useParseParams(ParsingParams parsingParams) {
     if (parsingParams.isParseInternal()) {
       System.out.println("Using asym ids");
       chainList = internalChainIds;
     } else {
       System.out.println("Using auth ids");
       chainList = publicChainIds;
+    }    
+  }
+
+  
+  /**
+   * Set the chain level information and then loop through the groups
+   * @param chainIndex
+   */
+  private void addOrUpdateChainInfo(int chainIndex) {
+    // Get the current c
+    String currentChainId = chainList[chainIndex];
+    int groupsThisChain = groupsPerChain[chainIndex];
+    // If we've already seen this chain -> just update it
+    if (chainIdSet.contains(currentChainId)) {
+      structInflator.updateChainInfo(currentChainId, groupsThisChain);
+    } else {
+      structInflator.setChainInfo(currentChainId, groupsThisChain);
+      chainIdSet.add(currentChainId);
     }
-    // Now get the group map
-    int modelCounter = -1;
-    int groupCounter = 0;
-    int chainCounter = 0;
-    for (int modelChains: chainsPerModel) {
-      modelCounter++;
-      structInflator.setModelInfo(modelCounter, modelChains);
-      // A list to check if we need to set or update the chains
-      HashSet<String> chainIdSet = new HashSet<>();
-      int totChainsThisMod = chainCounter + modelChains;
-      for (int thisChain = chainCounter; thisChain < totChainsThisMod;  thisChain++) {
-        String thisChainIdString = chainList[thisChain];
-        int groupsThisChain = groupsPerChain[thisChain];
-        // If we've already seen this chain -> just update it
-        if (chainIdSet.contains(thisChainIdString)) {
-          structInflator.updateChainInfo(thisChainIdString, groupsThisChain);
-        } else {
-          structInflator.setChainInfo(thisChainIdString, groupsThisChain);
-          chainIdSet.add(thisChainIdString);
-        }
-        int nextInd = groupCounter + groupsThisChain;
-        for (int thisGroupNum = groupCounter;
-            thisGroupNum < nextInd; thisGroupNum++) {
-          groupCounter++;
-          int atomCount = addGroup(thisGroupNum, nucAcidList);
-          lastCount += atomCount;
-        }
-        chainCounter++;
+    int nextInd = groupCounter + groupsThisChain;
+    // Now iteratr over the group
+    for (int currentGroupNumber = groupCounter; currentGroupNumber < nextInd; currentGroupNumber++) {
+      groupCounter++;
+      int atomCount = addGroup(currentGroupNumber);
+      lastAtomCount += atomCount;
+    }    
+  }
+
+  /**
+   * Adds the group.
+   *
+   * @param thisGroupNum the this group num
+   * @param nucAcidList the nuc acid list
+   * @return the int
+   */
+  private int addGroup(final int thisGroupNum) {
+    // Now get the group
+    int g = groupList[thisGroupNum];
+    // Get this info
+    PDBGroup currentGroup = groupMap.get(g);
+    List<String> atomInfo = currentGroup.getAtomInfo();
+    int atomCount = atomInfo.size() / 2;
+    int thsG = groupNum[thisGroupNum];
+    char thsIns = insCode[lastAtomCount];
+    int groupTypeIndicator = getGroupTypIndicator(currentGroup);
+    structInflator.setGroupInfo(currentGroup.getGroupName(), thsG, thsIns, groupTypeIndicator, atomCount);
+    // A counter for the atom information
+    atomCounter = 0;
+    // Now read the next atoms
+    for (int i = lastAtomCount; i < lastAtomCount + atomCount; i++) {
+      addAtomData(currentGroup, atomInfo, i);  
+    }
+    addGroupBonds(currentGroup.getBondIndices(), currentGroup.getBondOrders());
+    return atomCount;
+  }
+  
+  
+  /**
+   * Get the type of group (0,1 or 2) depending on whether it is an amino aicd (1), nucleic acid (2) or ligand (0)
+   * @param currentGroup
+   * @return The type of group. (0,1 or 2) depending on whether it is an amino aicd (1), nucleic acid (2) or ligand (0)
+   */
+  private int getGroupTypIndicator(PDBGroup currentGroup) {
+    // TODO NEEDS FIXING FOR NUCLEIC ACIDS...
+    // FIXME
+    // CURRENTLY JUST CONSIDERS AMINO ACIDS AND HET ATOMS
+    // OK SO NOW WE NEED A FLAG TO FIND NUCLEIC ACIDS
+    if (nucAcidList.contains(currentGroup.getGroupName())) {
+      // Now set this as the group
+      return 2;
+    } else {
+      int hetInd;
+      if (currentGroup.isHetFlag()) {
+        hetInd = 0;
+      } else {
+        hetInd = 1;
       }
+      
+      return hetInd;
+      
     }
-    // Now set the crystallographic and the bioassembly information
-    structInflator.setXtalInfo(spaceGroup, unitCell);
-    /// Now get the bioassembly information
+  }
+
+  /**
+   * Add atom level data for a given atom.
+   * @param currentPdbGroup The group being considered.
+   * @param atomInfo The list of strings containing atom level information.
+   * @param totalAtomCount The total count of atoms
+   */
+  private void addAtomData(PDBGroup currentPdbGroup, List<String> atomInfo, int totalAtomCount) {
+    // Now get all the relevant information here
+    String atomName = atomInfo.get(atomCounter * 2 + 1);
+    String element = atomInfo.get(atomCounter * 2);
+    int charge = currentPdbGroup.getAtomCharges().get(atomCounter);
+    int serialNumber = atomId[totalAtomCount];
+    char alternativeLocationId = altId[totalAtomCount];
+    float x = cartnX[totalAtomCount] / COORD_B_FACTOR_DIVIDER;
+    float z = cartnZ[totalAtomCount] / COORD_B_FACTOR_DIVIDER;
+    float y = cartnY[totalAtomCount] / COORD_B_FACTOR_DIVIDER;
+    float occupancy = occupancyArr[totalAtomCount] / OCCUPANCY_DIVIDER;
+    float temperatureFactor = bFactor[totalAtomCount] / OCCUPANCY_DIVIDER;
+    structInflator.setAtomInfo(atomName, serialNumber, alternativeLocationId,
+        x, y, z, occupancy, temperatureFactor, element, charge);
+    // Now increment the atom counter for this group
+    atomCounter++;
+  }
+
+  /**
+   * Adds bond information for a group (residue).
+   * @param bondInds A list of integer pairs. Each pair indicates the indices for the bonds.
+   * Bond indices are specified internally within the group and start at 0.
+   * @param bondOrders A list of integers specifying the bond orders for each bond.
+   */
+  private void addGroupBonds(List<Integer> bondInds, List<Integer> bondOrders) {
+    // Now add the bond information for this group
+    for (int thisBond = 0; thisBond < bondOrders.size(); thisBond++) {
+      int thisBondOrder = bondOrders.get(thisBond);
+      int thisBondIndOne = bondInds.get(thisBond * 2);
+      int thisBondIndTwo = bondInds.get(thisBond * 2 + 1);
+      structInflator.setGroupBonds(thisBondIndOne, thisBondIndTwo,
+          thisBondOrder);
+    }    
+  }
+
+  /**
+   * Generate inter group bonds
+   */
+  private void addInterGroupBonds() {
+    for (int i = 0; i < interGroupBondOrders.length; i++) {
+      structInflator.setInterGroupBonds(interGroupBondIndices[i * 2],
+          interGroupBondIndices[i * 2 + 1], interGroupBondOrders[i]);
+    }    
+  }
+
+  /**
+   * Adds the crystallographic info to the structure
+   */
+  private void addXtalographicInfo() {
+    structInflator.setXtalInfo(spaceGroup, unitCell);    
+  }
+
+  /**
+   * Parses the bioassembly data and inputs it to the structure inflator
+   */
+  private void generateBioAssembly() {
     Map<Integer, BioAssemblyInfoNew> bioAss = bioAssembly;
     // The maps for storing this information
     Map<Integer, Integer> keyList = new HashMap<Integer, Integer>();
@@ -553,108 +722,9 @@ public class DecodeStructure {
     }
     // Set the bioassembly information
     structInflator.setBioAssembly(keyList, sizeList,
-        inputIds, inputChainIds, inputTransformations);
-    // Now add the other bonds between groups
-    for (int i = 0; i < interGroupBondOrders.length; i++) {
-      structInflator.setInterGroupBonds(interGroupBondIndices[i * 2],
-          interGroupBondIndices[i * 2 + 1], interGroupBondOrders[i]);
-    }
-
+        inputIds, inputChainIds, inputTransformations);    
   }
 
-  /**
-   * Adds the group.
-   *
-   * @param thisGroupNum the this group num
-   * @param nucAcidList the nuc acid list
-   * @return the int
-   */
-  private int addGroup(final int thisGroupNum, final List<String> nucAcidList) {
-    // Now get the group
-    int g = groupList[thisGroupNum];
-    // Get this info
-    PDBGroup thisGroup = groupMap.get(g);
-    List<String> atomInfo = thisGroup.getAtomInfo();
-    int atomCount = atomInfo.size() / 2;
-    int thsG = groupNum[thisGroupNum];
-    char thsIns = insCode[lastCount];
-    // NEEDS FIXING FOR NUCLEIC ACIDS...
-    // CURRENTLY JUST CONSIDERS AMINO ACIDS AND HET ATOMS
-    // OK SO NOW WE NEED A FLAG TO FIND NUCLEIC ACIDS
-    if (nucAcidList.contains(thisGroup.getGroupName())) {
-      // Now set this as the group
-      structInflator.setGroupInfo(thisGroup.getGroupName(),
-          thsG, thsIns, 2, atomCount);
-    } else {
-      int hetInd;
-      if (thisGroup.isHetFlag()) {
-        hetInd = 0;
-      } else {
-        hetInd = 1;
-      }
-      structInflator.setGroupInfo(thisGroup.getGroupName(), thsG,
-          thsIns, hetInd, atomCount);
-    }
-    // A counter for the atom information
-    int atomCounter = 0;
-    // Now read the next atoms
-    for (int i = lastCount; i < lastCount + atomCount; i++) {
-      // Now get all the relevant information here
-      String atomName = atomInfo.get(atomCounter * 2 + 1);
-      String element = atomInfo.get(atomCounter * 2);
-      int charge = thisGroup.getAtomCharges().get(atomCounter);
-      int serialNumber = atomId[i];
-      char alternativeLocationId = altId[i];
-      float x = cartnX[i] / COORD_B_FACTOR_DIVIDER;
-      float z = cartnZ[i] / COORD_B_FACTOR_DIVIDER;
-      float y = cartnY[i] / COORD_B_FACTOR_DIVIDER;
-      float occupancy = occupancyArr[i] / OCCUPANCY_DIVIDER;
-      float temperatureFactor = bFactor[i] / OCCUPANCY_DIVIDER;
-      structInflator.setAtomInfo(atomName,
-          serialNumber, alternativeLocationId,
-          x, y, z, occupancy, temperatureFactor, element, charge);
-      atomCounter++;
-    }
-    // Now add the bond information for this group
-    List<Integer> bondInds = thisGroup.getBondIndices();
-    List<Integer> bondOrders = thisGroup.getBondOrders();
-    for (int thisBond = 0; thisBond < bondOrders.size(); thisBond++) {
-      int thisBondOrder = bondOrders.get(thisBond);
-      int thisBondIndOne = bondInds.get(thisBond * 2);
-      int thisBondIndTwo = bondInds.get(thisBond * 2 + 1);
-      structInflator.setGroupBonds(thisBondIndOne, thisBondIndTwo,
-          thisBondOrder);
-    }
-    return atomCount;
-  }
-
-  /**
-   * @return the internalChainIds
-   */
-  public String[] getInternalChainIds() {
-    return internalChainIds;
-  }
-
-  /**
-   * @param internalChainIds the internalChainIds to set
-   */
-  public void setInternalChainIds(String[] internalChainIds) {
-    this.internalChainIds = internalChainIds;
-  }
-
-  /**
-   * @return the publicChainIds
-   */
-  public String[] getPublicChainIds() {
-    return publicChainIds;
-  }
-
-  /**
-   * @param publicChainIds the publicChainIds to set
-   */
-  public void setPublicChainIds(String[] publicChainIds) {
-    this.publicChainIds = publicChainIds;
-  }
 
 
 }

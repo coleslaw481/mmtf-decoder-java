@@ -90,4 +90,19 @@ public class DecoderUtils {
     return outArr;
 
   }
+  
+  
+  /**
+   * Decode chain ids from byte arrays
+   * @param currentChainList the byte array of the chain list input. Each chain takes up 4 bytes.
+   * @return the string array of the parsed chain ids
+   */
+  public String[] decodeChainList(byte[] currentChainList) {
+    int outputLength = currentChainList.length/4;
+    String[] outputArr = new String[outputLength];
+    for (int i = 0; i < outputLength; i++){
+      outputArr[i] = getChainId(currentChainList, i);
+    }
+    return outputArr;
+  }
 }
