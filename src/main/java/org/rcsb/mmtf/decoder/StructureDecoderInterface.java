@@ -30,6 +30,7 @@ public interface StructureDecoderInterface {
    */
   void setChainInfo(String chainId, int groupCount);
 
+
   /**
    * Updates the information for this chain.
    *
@@ -40,7 +41,7 @@ public interface StructureDecoderInterface {
 
 
   /**
-   * Sets the information for a given group.
+   * Sets the information for a given group / residue with atomic data.
    * @param groupName 3 letter code name of this group/residue
    * @param groupNumber sequence position of this group
    * @param insertionCode the one letter insertion code
@@ -50,6 +51,7 @@ public interface StructureDecoderInterface {
   void setGroupInfo(String groupName, int groupNumber, char insertionCode,
       int polymerType, int atomCount);
 
+  
   /**
    * Sets the atom level information for a given atom.
    * @param atomName 1-3 long string of the unique name of the atom

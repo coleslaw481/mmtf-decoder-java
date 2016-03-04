@@ -277,7 +277,7 @@ Serializable {
   public final void setBioAssembly(final Map<Integer,
       Integer> keyList, final Map<Integer, Integer> sizeList,
       final Map<Integer, List<String>> inputIds, final Map<Integer,
-       List<String>> inputChainIds, final Map<Integer,
+      List<String>> inputChainIds, final Map<Integer,
       List<double[]>> inputTransformations) {
     PDBHeader pdbHeader = structure.getPDBHeader();
     // Get the bioassebly data
@@ -349,4 +349,6 @@ Serializable {
     }
 
   }
+
+
 }

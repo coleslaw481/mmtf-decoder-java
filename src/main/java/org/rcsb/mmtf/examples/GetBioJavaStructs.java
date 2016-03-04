@@ -55,7 +55,6 @@ public class GetBioJavaStructs {
     if (isFile) {
       return getFromFileSystem(basePath, inputCode);
     }
-    DecodeStructure ds = new DecodeStructure();
     BioJavaStructureDecoder bjs = new BioJavaStructureDecoder();
     // Get these as an inputstream
     byte[] b = IOUtils.toByteArray((new URL(BASE_URL
@@ -63,7 +62,8 @@ public class GetBioJavaStructs {
     // Cache this
     cacheFile(b, basePath, inputCode);
     // Now get the actual structure
-    ds.getStructFromByteArray(deflateGzip(b), bjs, pp);
+    DecodeStructure ds = new DecodeStructure(deflateGzip(b));
+    ds.getStructFromByteArray(bjs, pp);
     return bjs.getStructure();
   }
 
@@ -134,13 +134,14 @@ public class GetBioJavaStructs {
    */
   public final Structure getFromFileSystem(final String fullPath)
       throws FileNotFoundException, IOException {
-    DecodeStructure ds = new DecodeStructure();
+
     BioJavaStructureDecoder bjs = new BioJavaStructureDecoder();
     // Get these as an inputstream
     byte[] b = deflateGzip(IOUtils.toByteArray(
         new FileInputStream(new File(fullPath))));
     // Now get the actual structure
-    ds.getStructFromByteArray(b, bjs, pp);
+    DecodeStructure ds = new DecodeStructure(b);
+    ds.getStructFromByteArray(bjs, pp);
     return bjs.getStructure();
   }
 

@@ -109,6 +109,15 @@ public class MmtfBean {
 
   /** The atom id list. */
   private byte[] atomIdList;
+  
+  /** The SEQRES sequence, per asym chain. */
+  private List<String> sequence;
+  
+  /** The SeqRes group ids. */
+  private byte[] seqResGroupIds;
+  
+  /** The experimental method(s). */
+  private List<String> experimentalMethods;
 
   /**
    * Gets the space group.
@@ -670,5 +679,47 @@ public class MmtfBean {
   public final void setInternalChainList(final byte[] inputInternalChainList) {
     this.internalChainList = inputInternalChainList;
   }
+
+  /**
+   * @return the experimental methods
+   */
+  public List<String> getExperimentalMethods() {
+    return experimentalMethods;
+  }
+
+  /**
+   * @param experimentalMethods the experimental methods to set
+   */
+  public void setExperimentalMethods(List<String> experimentalMethods) {
+    this.experimentalMethods = experimentalMethods;
+  }
+
+  /**
+   * @return the sequence on a per chain level
+   */
+  public List<String> getSequence() {
+    return sequence;
+  }
+
+  /**
+   * @param sequence the sequence to set
+   */
+  public void setSequence(List<String> sequence) {
+    this.sequence = sequence;
+  }
+
+  /**
+   * @return the seqResGroupIds
+   */
+  public byte[] getSeqResGroupIds() {
+    return seqResGroupIds;
+  }
+
+  /**
+   * @param seqResGroupIds the seqResGroupIds to set
+   */
+  public void setSeqResGroupIds(byte[] seqResGroupIds) {
+    this.seqResGroupIds = seqResGroupIds;
+  } 
 
 }
