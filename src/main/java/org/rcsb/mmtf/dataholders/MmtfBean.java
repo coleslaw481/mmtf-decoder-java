@@ -1,7 +1,5 @@
 package org.rcsb.mmtf.dataholders;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,11 +47,10 @@ public class MmtfBean {
   private String spaceGroup;
 
   /** The unit cell. */
-  private List<Float> unitCell = new ArrayList<Float>();
+  private List<Float> unitCell;
 
   /** The bio assembly. */
-  private Map<Integer, BioAssemblyInfoNew> bioAssembly =
-      new HashMap<Integer, BioAssemblyInfoNew>();
+  private Map<Integer, BioAssemblyInfoNew> bioAssembly;
 
   /** The bond atom (indices) list. */
   private byte[] bondAtomList;
@@ -63,7 +60,7 @@ public class MmtfBean {
 
   /** The group map. */
   // Map of all the data
-  private  Map<Integer, PDBGroup> groupMap = new HashMap<Integer, PDBGroup>();
+  private  Map<Integer, PDBGroup> groupMap;
 
   /** The x coord big. 4 byte integers in pairs. */
   private byte[] xCoordBig;
@@ -96,10 +93,10 @@ public class MmtfBean {
   private byte[] occList;
 
   /** The alt label list. */
-  private List<String> altLabelList = new ArrayList<String>();
+  private List<String> altLabelList;
 
   /** The insertion code list. */
-  private List<String> insCodeList = new ArrayList<String>();
+  private List<String> insCodeList;
 
   /** The group type list. */
   private byte[] groupTypeList;
