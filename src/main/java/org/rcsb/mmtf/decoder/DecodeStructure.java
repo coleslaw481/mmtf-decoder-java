@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.msgpack.jackson.dataformat.MessagePackFactory;
@@ -509,6 +510,7 @@ public class DecodeStructure {
       final ParsingParams parsingParams) throws IOException {    
     // Set the inflator
     structInflator = inputStructInflator;
+    // Now get the parsing parameters to do their thing
     useParseParams(parsingParams);
     // Now get the group map
     for (int modelChains: chainsPerModel) {
@@ -518,7 +520,6 @@ public class DecodeStructure {
       int totChainsThisModel = chainCounter + modelChains;
       for (int chainIndex = chainCounter; chainIndex < totChainsThisModel;  chainIndex++) {
         addOrUpdateChainInfo(chainIndex);
-        chainCounter++;
       }
       modelCounter++;
     }
@@ -568,6 +569,7 @@ public class DecodeStructure {
       int atomCount = addGroup(currentGroupNumber);
       lastAtomCount += atomCount;
     }    
+    chainCounter++;
   }
 
   /**
@@ -632,7 +634,7 @@ public class DecodeStructure {
    * @param totalAtomCount The total count of atoms
    */
   private void addAtomData(PDBGroup currentPdbGroup, List<String> atomInfo, int totalAtomCount) {
-    // Now get all the relevant information here
+    // Now get all the relevant atom level information here
     String atomName = atomInfo.get(atomCounter * 2 + 1);
     String element = atomInfo.get(atomCounter * 2);
     int charge = currentPdbGroup.getAtomCharges().get(atomCounter);
@@ -688,23 +690,22 @@ public class DecodeStructure {
    */
   private void generateBioAssembly() {
     Map<Integer, BioAssemblyInfoNew> bioAss = bioAssembly;
-    // The maps for storing this information
-    Map<Integer, Integer> keyList = new HashMap<Integer, Integer>();
-    Map<Integer, Integer> sizeList = new HashMap<Integer, Integer>();
-    Map<Integer, List<String>> inputIds = new HashMap<Integer, List<String>>();
-    Map<Integer, List<String>> inputChainIds =
-        new HashMap<Integer, List<String>>();
-    Map<Integer, List<double[]>> inputTransformations =
-        new HashMap<Integer, List<double[]>>();
-    for (Integer key: bioAss.keySet()) {
+    // The maps for storing the bioassembly information
+    Map<Integer, Integer> keyList = new HashMap<>();
+    Map<Integer, Integer> sizeList = new HashMap<>();
+    Map<Integer, List<String>> inputIds = new HashMap<>();
+    Map<Integer, List<String>> inputChainIds = new HashMap<>();
+    Map<Integer, List<double[]>> inputTransformations = new HashMap<>();
+    // Now iterate over the sntries
+    for (Entry<Integer, BioAssemblyInfoNew> entry : bioAss.entrySet()) {
       // Get the bioassembly info
-      BioAssemblyInfoNew bioAssOld = bioAss.get(key);
+      BioAssemblyInfoNew bioAssOld = entry.getValue();
+      int key = entry.getKey();
       keyList.put(key, bioAssOld.getId());
       sizeList.put(key, bioAssOld.getMacromolecularSize());
-
-      List<String> idList = new ArrayList<String>();
-      List<String> chainIdList = new ArrayList<String>();
-      List<double[]> transformList = new ArrayList<double[]>();
+      List<String> idList = new ArrayList<>();
+      List<String> chainIdList = new ArrayList<>();
+      List<double[]> transformList = new ArrayList<>();
       for (BiologicalAssemblyTransformationNew
           bioTrans:bioAssOld.getTransforms()) {
         double[] trans = bioTrans.getTransformation();
