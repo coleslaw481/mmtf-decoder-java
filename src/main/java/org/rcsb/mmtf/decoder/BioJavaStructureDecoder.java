@@ -174,7 +174,7 @@ Serializable {
       altGroup = getCorrectAltLocGroup(alternativeLocationId);
       atom.setAltLoc(alternativeLocationId);
     } else {
-      atom.setAltLoc(new Character(' '));
+      atom.setAltLoc(Character.valueOf(' '));
     }
     atom.setX(x);
     atom.setY(y);

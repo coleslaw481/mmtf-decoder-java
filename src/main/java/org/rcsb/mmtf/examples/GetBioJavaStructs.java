@@ -75,9 +75,18 @@ public class GetBioJavaStructs {
    * @return the file
    */
   private boolean getFile(final String basePath, final String pdbId) {
-    return !(basePath == null);
-
-
+    // Set the path for the file
+    if (basePath == null) {
+      System.out.println("Can't get - "
+          + "PDB_DIR and PDB_CACHE_DIR not specified");
+      return false;
+    }
+    String dirPath = basePath
+        + "/data/structures/divided/msgpack/"
+        + pdbId.substring(1, END_ID_FOR_MID_PDB) + "/";
+    String filePath = dirPath + pdbId + ".mmtf";
+    File thisFile = new File(filePath);
+    return thisFile.exists();
   }
 
   /**
@@ -102,7 +111,10 @@ public class GetBioJavaStructs {
     String filePath = dirPath + pdbId + ".mmtf";
 
     File thisFile = new File(dirPath);
-    thisFile.mkdirs();
+    boolean success  = thisFile.mkdirs();
+    if(success){
+      System.out.println("Made dictionaries");
+    }
     FileUtils.writeByteArrayToFile(new File(filePath), b);
   }
 

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.biojava.nbio.structure.io.PDBFileParser;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -17,32 +19,44 @@ public class PDBGroup implements Serializable {
   /** Serial id for this version of the format. */
   private static final long serialVersionUID = 2880633780569899800L;
 
-
   /** The group name. (e.g. HIS) */
-  private String groupName = new String();
+  private String groupName;
 
   /** The het flag. Indicates wether the group is a HETATM record or not*/
-  private boolean hetFlag = false;
+  private boolean hetFlag;
 
   /** The atom info. A list of strings indicating
    * the atominfo (Atom name and element name). */
-  private List<String> atomInfo = new ArrayList<String>();
+  private List<String> atomInfo;
 
   /** The bond orders. A list of integers indicating the bond orders*/
-  private List<Integer> bondOrders = new ArrayList<Integer>();
+  private List<Integer> bondOrders;
 
   /** The bond indices (in pairs).
    * (e.g. 0,1 means there is bond between atom 0 and 1).*/
-  private List<Integer> bondIndices = new ArrayList<Integer>();
+  private List<Integer> bondIndices;
 
   /** The atom charges. */
   // The atomic charges of these atoms
-  private List<Integer> atomCharges = new ArrayList<Integer>();
+  private List<Integer> atomCharges;
 
   /** The single letter code. */
   // The single letter code
   private String singleLetterCode;
 
+  /**
+   * Constructor for the PDB group. Makes empty lists and sets 
+   * hetflag to false by default.
+   */
+  public PDBGroup(){
+    groupName = new String();
+    hetFlag = false;
+    atomInfo = new ArrayList<String>();
+    bondOrders = new ArrayList<Integer>();
+    bondIndices = new ArrayList<Integer>();
+    atomCharges = new ArrayList<Integer>();
+  }
+  
   /**
    * Gets the atom info.
    *
