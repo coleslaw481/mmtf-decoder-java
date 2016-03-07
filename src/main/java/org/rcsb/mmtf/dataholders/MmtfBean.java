@@ -31,17 +31,17 @@ public class MmtfBean {
   /** The number of atoms. */
   private int numAtoms;
 
-  /** The internal chains per model. */
-  private int[] internalChainsPerModel;
+  /** The number of chains per model. */
+  private int[] chainsPerModel;
 
-  /** The chain list. */
-  private byte[] chainList;
+  /** The names of the chains. Each chain is allocated four bytes. Chain names can be up to four characters long. 0 bytes indicate the end of the chain name. These are taken from the auth id. */
+  private byte[] chainNameList;
 
-  /** The internal chain list. */
-  private byte[] internalChainList;
+  /** The names of the chains. Each chain is allocated four bytes. Chain names can be up to four characters long. 0 bytes indicate the end of the chain name. These are taken from the asym id. */
+  private byte[] chainIdList;
 
   /** The internal groups per chain. */
-  private int[] internalGroupsPerChain;
+  private int[] groupsPerChain;
 
   /** The space group. */
   private String spaceGroup;
@@ -101,17 +101,17 @@ public class MmtfBean {
   /** The group type list. */
   private byte[] groupTypeList;
 
-  /** The group num list. */
-  private byte[]  groupNumList;
+  /** The group id list. Identifies each group along the chain. */
+  private byte[]  groupIdList;
 
   /** The atom id list. */
   private byte[] atomIdList;
   
   /** The SEQRES sequence, per asym chain. */
-  private List<String> sequence;
+  private List<String> chainSeqList;
   
   /** The SeqRes group ids. */
-  private byte[] seqResGroupIds;
+  private byte[] seqResIdList;
   
   /** The experimental method(s). */
   private List<String> experimentalMethods;
@@ -157,8 +157,8 @@ public class MmtfBean {
    *
    * @return the group num list
    */
-  public final byte[] getGroupNumList() {
-    return groupNumList;
+  public final byte[] getGroupIdList() {
+    return groupIdList;
   }
 
   /**
@@ -166,8 +166,8 @@ public class MmtfBean {
    *
    * @param inputGroupNumList the new group num list
    */
-  public final void setGroupNumList(final byte[] inputGroupNumList) {
-    this.groupNumList = inputGroupNumList;
+  public final void setGroupIdList(final byte[] inputGroupNumList) {
+    this.groupIdList = inputGroupNumList;
   }
 
   /**
@@ -342,25 +342,25 @@ public class MmtfBean {
   }
 
   /**
-   * Gets the chain list.
+   * Gets the chain names. The byte array indicating the (up to four characters) name of the chain. This is taken from the auth id.
    *
    * @return the chain list
    */
-  public final byte[] getChainList() {
-    return chainList;
+  public final byte[] getChainNameList() {
+    return chainNameList;
   }
 
   /**
-   * Sets the chain list.
+   * Sets the chain names. The byte array indicating the (up to four characters) name of the chain. This is taken from the auth id.
    *
    * @param inputChainList the new chain list
    */
-  public final void setChainList(final byte[] inputChainList) {
-    this.chainList = inputChainList;
+  public final void setChainNameList(final byte[] inputChainList) {
+    this.chainNameList = inputChainList;
   }
 
   /**
-   * Sets the bio assembly.
+   * Sets the bioassembly information.
    *
    * @param inputBioAssembly the bio assembly
    */
@@ -622,41 +622,41 @@ public class MmtfBean {
   }
 
   /**
-   * Gets the internal chains per model.
+   * Gets the number of chains per model. Chains are currently specified by asym (internal) chain ids.
    *
-   * @return the internal chains per model
+   * @return the list of chains per model.
    */
-  public final int[] getInternalChainsPerModel() {
-    return internalChainsPerModel;
+  public final int[] getChainsPerModel() {
+    return chainsPerModel;
   }
 
   /**
-   * Sets the internal chains per model.
+   * Sets the number of chains per model. Currently specified by asy (internal) chain ids.
    *
-   * @param inputInternalChainsPerModel the new internal chains per model
+   * @param inputInternalChainsPerModel the new list of chains per model.
    */
-  public final void setInternalChainsPerModel(final int[]
+  public final void setChainsPerModel(final int[]
       inputInternalChainsPerModel) {
-    this.internalChainsPerModel = inputInternalChainsPerModel;
+    this.chainsPerModel = inputInternalChainsPerModel;
   }
 
   /**
-   * Gets the internal groups per chain.
+   * Gets the number of groups per chain.
    *
    * @return the internal groups per chain
    */
-  public final int[] getInternalGroupsPerChain() {
-    return internalGroupsPerChain;
+  public final int[] getGroupsPerChain() {
+    return groupsPerChain;
   }
 
   /**
-   * Sets the internal groups per chain.
+   * Sets the number of groups in a chain.
    *
-   * @param inputInternalGroupsPerChain the new internal groups per chain
+   * @param inputGroupsPerChain the new internal groups per chain
    */
-  public final void setInternalGroupsPerChain(final int[]
-      inputInternalGroupsPerChain) {
-    this.internalGroupsPerChain = inputInternalGroupsPerChain;
+  public final void setGroupsPerChain(final int[]
+      inputGroupsPerChain) {
+    this.groupsPerChain = inputGroupsPerChain;
   }
 
   /**
@@ -664,8 +664,8 @@ public class MmtfBean {
    *
    * @return the internal chain list
    */
-  public final byte[] getInternalChainList() {
-    return internalChainList;
+  public final byte[] getChainIdList() {
+    return chainIdList;
   }
 
   /**
@@ -673,8 +673,8 @@ public class MmtfBean {
    *
    * @param inputInternalChainList the new internal chain list
    */
-  public final void setInternalChainList(final byte[] inputInternalChainList) {
-    this.internalChainList = inputInternalChainList;
+  public final void setChainIdList(final byte[] inputInternalChainList) {
+    this.chainIdList = inputInternalChainList;
   }
 
   /**
@@ -694,29 +694,29 @@ public class MmtfBean {
   /**
    * @return the sequence on a per chain level
    */
-  public List<String> getSequence() {
-    return sequence;
+  public List<String> getChainSeqList() {
+    return chainSeqList;
   }
 
   /**
    * @param sequence the sequence to set
    */
-  public void setSequence(List<String> sequence) {
-    this.sequence = sequence;
+  public void setChainSeqList(List<String> sequence) {
+    this.chainSeqList = sequence;
   }
 
   /**
    * @return the seqResGroupIds
    */
-  public byte[] getSeqResGroupIds() {
-    return seqResGroupIds;
+  public byte[] getSeqResIdList() {
+    return seqResIdList;
   }
 
   /**
    * @param seqResGroupIds the seqResGroupIds to set
    */
-  public void setSeqResGroupIds(byte[] seqResGroupIds) {
-    this.seqResGroupIds = seqResGroupIds;
+  public void setSeqResIdList(byte[] seqResGroupIds) {
+    this.seqResIdList = seqResGroupIds;
   } 
 
 }

@@ -484,22 +484,22 @@ public class DecodeStructure {
         (ArrayList<String>) inputData.getInsCodeList());
     // Get the groupNumber
     groupNum = intRunLengthDelta.decompressByteArray(
-        inputData.getGroupNumList());
+        inputData.getGroupIdList());
     groupMap = inputData.getGroupMap();
     // Get the seqRes groups
-    seqResGroupList = intRunLengthDelta.decompressByteArray(inputData.getSeqResGroupIds());
+    seqResGroupList = intRunLengthDelta.decompressByteArray(inputData.getSeqResIdList());
     // Get the number of chains per model
-    chainsPerModel = inputData.getInternalChainsPerModel();
-    groupsPerChain = inputData.getInternalGroupsPerChain();
+    chainsPerModel = inputData.getChainsPerModel();
+    groupsPerChain = inputData.getGroupsPerChain();
     // Get the internal and public facing chain ids
-    publicChainIds = decoderUtils.decodeChainList(inputData.getChainList());
-    internalChainIds = decoderUtils.decodeChainList(inputData.getInternalChainList());
+    publicChainIds = decoderUtils.decodeChainList(inputData.getChainNameList());
+    internalChainIds = decoderUtils.decodeChainList(inputData.getChainIdList());
     spaceGroup = inputData.getSpaceGroup();
     unitCell = inputData.getUnitCell();
     bioAssembly  = inputData.getBioAssembly();
     interGroupBondIndices = decoderUtils.bytesToInts(inputData.getBondAtomList());
     interGroupBondOrders = decoderUtils.bytesToByteInts(inputData.getBondOrderList());
-    sequenceInfo = inputData.getSequence();
+    sequenceInfo = inputData.getChainSeqList();
   }
 
   /**
