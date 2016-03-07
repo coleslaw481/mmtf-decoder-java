@@ -611,7 +611,7 @@ public class DecodeStructure {
    * @return The type of group. (0,1 or 2) depending on whether it is an amino aicd (1), nucleic acid (2) or ligand (0)
    */
   private int getGroupTypIndicator(PDBGroup currentGroup) {
-    String currentGroupType = currentGroup.getGroupType();
+    String currentGroupType = currentGroup.getChemCompType();
     if(currentGroupType.contains("PEPTIDE")){
       return 1;
     }

@@ -40,7 +40,7 @@ public class PDBGroup implements Serializable {
   /** A string (taken from the chemical component dictionary) indicating 
    * the type of the group. Corresponds to -> http://mmcif.wwpdb.org/dictionaries/mmcif_pdbx.dic/Items/_chem_comp.type.html
    */
-  private String groupType;
+  private String chemCompType;
   
   /**
    * Constructor for the PDB group. Makes empty lists.
@@ -165,14 +165,14 @@ public class PDBGroup implements Serializable {
   /**
    * @return the groupType - corresponds to _chem_comp.type
    */
-  public String getGroupType() {
-    return groupType;
+  public String getChemCompType() {
+    return chemCompType;
   }
 
   /**
    * @param groupType the groupType (corresponds to _chem_comp.type) to set
    */
-  public void setGroupType(String groupType) {
-    this.groupType = groupType;
+  public void setChemCompType(String groupType) {
+    this.chemCompType = groupType;
   }
 }
