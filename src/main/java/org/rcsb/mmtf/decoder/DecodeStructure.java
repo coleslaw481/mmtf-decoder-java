@@ -93,44 +93,44 @@ public class DecodeStructure {
 
   /** The space group of the structure*/
   private String spaceGroup;
-  
+
   /** The unit cell of the structure*/
   private List<Float> unitCell;
-  
+
   /** The bioassembly information for the structure*/
   private Map<Integer, BioAssemblyInfoNew> bioAssembly;
-  
+
   /** The bond indices for bonds between groups*/
   private int[] interGroupBondIndices;
-  
+
   /** The bond orders for bonds between groups*/
   private int[] interGroupBondOrders;
-  
+
   /** The chosen list of chain ids */
   private String[] chainList;
-  
+
   /** The counter for the models */
   private int modelCounter;
-  
+
   /** The counter for the groups (residues) */
   private int groupCounter;
-  
+
   /** The counter for the chains */
   private int chainCounter;
-  
+
   /** The counter for atoms in a group */
   private int atomCounter;
-  
+
   /** A unique set of lists for each model */
   private Set<String> chainIdSet;
-  
+
   /** The sequence information. An entry for each chain. In a list.  */
   private List<String> sequenceInfo;
-  
-  
+
+
   /** A list containing pdb group names for nucleic acids */
   List<String> nucAcidList = new ArrayList<>();
-  
+
   /**
    * @return the spaceGroup
    */
@@ -417,9 +417,9 @@ public class DecodeStructure {
    */
   @SuppressWarnings("unused")
   private DecodeStructure(){
-    
+
   }
-  
+
   /**
    * @return the internalChainIds
    */
@@ -447,7 +447,7 @@ public class DecodeStructure {
   public void setPublicChainIds(String[] publicChainIds) {
     this.publicChainIds = publicChainIds;
   }
-  
+
   /**
    * The constructor requires a byte array to fill the data
    * @param inputByteArr
@@ -535,7 +535,7 @@ public class DecodeStructure {
     addInterGroupBonds();
 
   }
-   
+
   /**
    * Use the parsing parameters to set the scene.
    * @param parsingParams
@@ -550,7 +550,7 @@ public class DecodeStructure {
     }    
   }
 
-  
+
   /**
    * Set the chain level information and then loop through the groups
    * @param chainIndex
@@ -603,31 +603,23 @@ public class DecodeStructure {
     addGroupBonds(currentGroup.getBondIndices(), currentGroup.getBondOrders());
     return atomCount;
   }
-  
-  
+
+
   /**
    * Get the type of group (0,1 or 2) depending on whether it is an amino aicd (1), nucleic acid (2) or ligand (0)
    * @param currentGroup
    * @return The type of group. (0,1 or 2) depending on whether it is an amino aicd (1), nucleic acid (2) or ligand (0)
    */
   private int getGroupTypIndicator(PDBGroup currentGroup) {
-    // TODO NEEDS FIXING FOR NUCLEIC ACIDS...
-    // FIXME
-    // CURRENTLY JUST CONSIDERS AMINO ACIDS AND HET ATOMS
-    // OK SO NOW WE NEED A FLAG TO FIND NUCLEIC ACIDS
-    if (nucAcidList.contains(currentGroup.getGroupName())) {
-      // Now set this as the group
+    String currentGroupType = currentGroup.getGroupType();
+    if(currentGroupType.contains("PEPTIDE")){
+      return 1;
+    }
+    if(currentGroupType.contains("DNA") || currentGroupType.contains("RNA")){
       return 2;
-    } else {
-      int hetInd;
-      if (currentGroup.isHetFlag()) {
-        hetInd = 0;
-      } else {
-        hetInd = 1;
-      }
-      
-      return hetInd;
-      
+    }
+    else{
+      return 0;
     }
   }
 

@@ -20,9 +20,6 @@ public class PDBGroup implements Serializable {
   /** The group name. (e.g. HIS) */
   private String groupName;
 
-  /** The het flag. Indicates wether the group is a HETATM record or not*/
-  private boolean hetFlag;
-
   /** The atom info. A list of strings indicating
    * the atominfo (Atom name and element name). */
   private List<String> atomInfo;
@@ -40,13 +37,16 @@ public class PDBGroup implements Serializable {
   /** The single letter code. */
   private String singleLetterCode;
 
+  /** A string (taken from the chemical component dictionary) indicating 
+   * the type of the group. Corresponds to -> http://mmcif.wwpdb.org/dictionaries/mmcif_pdbx.dic/Items/_chem_comp.type.html
+   */
+  private String groupType;
+  
   /**
-   * Constructor for the PDB group. Makes empty lists and sets 
-   * hetflag to false by default.
+   * Constructor for the PDB group. Makes empty lists.
    */
   public PDBGroup(){
     groupName = new String();
-    hetFlag = false;
     atomInfo = new ArrayList<String>();
     bondOrders = new ArrayList<Integer>();
     bondIndices = new ArrayList<Integer>();
@@ -127,24 +127,6 @@ public class PDBGroup implements Serializable {
   }
 
   /**
-   * Checks if is het flag.
-   *
-   * @return true, if is het flag
-   */
-  public final boolean isHetFlag() {
-    return hetFlag;
-  }
-
-  /**
-   * Sets the het flag.
-   *
-   * @param isHetGroup the new het flag
-   */
-  public final void setHetFlag(final boolean isHetGroup) {
-    this.hetFlag = isHetGroup;
-  }
-
-  /**
    * Gets the atom charges.
    *
    * @return the atom charges
@@ -178,5 +160,19 @@ public class PDBGroup implements Serializable {
    */
   public final void setSingleLetterCode(final String inputSingleLetterCode) {
     this.singleLetterCode = inputSingleLetterCode;
+  }
+
+  /**
+   * @return the groupType - corresponds to _chem_comp.type
+   */
+  public String getGroupType() {
+    return groupType;
+  }
+
+  /**
+   * @param groupType the groupType (corresponds to _chem_comp.type) to set
+   */
+  public void setGroupType(String groupType) {
+    this.groupType = groupType;
   }
 }
