@@ -1,5 +1,7 @@
 package org.rcsb.mmtf.dataholders;
 
+import java.io.Serializable;
+
 import javax.vecmath.Point3d;
 
 
@@ -8,7 +10,9 @@ import javax.vecmath.Point3d;
  *
  * @author anthony
  */
-public class CalphaAlignBean {
+public class CalphaAlignBean implements Serializable {
+
+  private static final long serialVersionUID = 2471082879532014760L;
 
   /** The pdb id. Four letter code. */
   private String pdbId;
