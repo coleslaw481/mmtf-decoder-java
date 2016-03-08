@@ -28,8 +28,9 @@ public class CheckOnBiojava {
    * @return
    */
   private boolean checkIfAtomsSame(Structure structOne, Structure structTwo) {
-    // Firt check the bioassemblies
+    // First check the bioassemblies
     checkIfBioassemblySame(structOne, structTwo);
+    // Now check the pdb header
     // Now check the sequence
     int numModels = structOne.nrModels();
     if(numModels!=structTwo.nrModels()){

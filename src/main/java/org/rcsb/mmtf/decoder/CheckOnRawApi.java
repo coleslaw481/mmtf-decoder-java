@@ -33,12 +33,11 @@ public class CheckOnRawApi {
   }
   
   
-  
   /**
-   * Test of sequence and seqres group level information
-   * @param structOne
-   * @param structTwo
-   * @return
+   * Test of sequence and seqres group level information. At the moment the decoder does not parse this data.
+   * This test checks to see if the underlying data is how one would expect.
+   * @param biojavaStruct
+   * @param params
    */
   public void checkIfSeqResInfoSame(Structure biojavaStruct, FileParsingParameters params){
     if(params.isUseInternalChainId()){
