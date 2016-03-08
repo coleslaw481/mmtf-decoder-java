@@ -1,6 +1,7 @@
 package org.rcsb.mmtf.decoder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,18 @@ public class CheckOnRawApi {
   public CheckOnRawApi(byte[] inputData) {
      decodeStructure = new DecodeStructure(inputData);
   }
+  
+  /**
+   * Test that required data is available the way we would expect.
+   */
+  public void checkRawDataConsistency(Structure biojavaStruct, FileParsingParameters params) {
+    // Series of tests on expected values from the raw API
+    assertNotEquals(decodeStructure.getMmtfProducer(), null);
+    assertNotEquals(decodeStructure.getMmtfVersion(), null);
+    checkIfSeqResInfoSame(biojavaStruct, params);
+  }
+  
+  
   
   /**
    * Test of sequence and seqres group level information

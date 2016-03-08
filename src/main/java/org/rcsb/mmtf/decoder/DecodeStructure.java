@@ -124,7 +124,12 @@ public class DecodeStructure {
 
   /** The sequence information. An entry for each chain. In a list.  */
   private List<String> sequenceInfo;
-
+  
+  /** The mmtf version */
+  private String mmtfVersion;
+  
+  /** The mmtf prodcuer */
+  private String mmtfProducer;
 
   /** A list containing pdb group names for nucleic acids */
   List<String> nucAcidList = new ArrayList<>();
@@ -504,6 +509,8 @@ public class DecodeStructure {
     interGroupBondIndices = decoderUtils.bytesToInts(inputData.getBondAtomList());
     interGroupBondOrders = decoderUtils.bytesToByteInts(inputData.getBondOrderList());
     sequenceInfo = inputData.getChainSeqList();
+    mmtfVersion = inputData.getMmtfVersion();
+    mmtfProducer = inputData.getMmtfProducer();
     }
     catch (IOException ioException){
       System.out.println("Error reading in byte arrays from message pack");
@@ -751,6 +758,22 @@ public class DecodeStructure {
   public void setSequenceInfo(List<String> sequenceInfo) {
     this.sequenceInfo = sequenceInfo;
   }
+
+  /**
+   * @return the gitVersion
+   */
+  public String getMmtfVersion() {
+    return mmtfVersion;
+  }
+
+  /**
+   * @return the mmtfProducer
+   */
+  public String getMmtfProducer() {
+    return mmtfProducer;
+  }
+
+
 
 
 

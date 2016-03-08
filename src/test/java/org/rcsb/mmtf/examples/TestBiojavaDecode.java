@@ -78,7 +78,7 @@ public class TestBiojavaDecode {
     checkEquiv.checkIfStructuresSame(mmtfStruct, mmcifStruct);
     // Now do the checks on the Raw data
     CheckOnRawApi checkRaw = new CheckOnRawApi(inputByteArr);
-    checkRaw.checkIfSeqResInfoSame(mmcifStruct, params);
+    checkRaw.checkRawDataConsistency(mmcifStruct, params);
 
   }
 }
