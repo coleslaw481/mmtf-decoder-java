@@ -612,6 +612,14 @@ public class DecodeStructure {
    */
   private int getGroupTypIndicator(PDBGroup currentGroup) {
     String currentGroupType = currentGroup.getChemCompType();
+    // At the moment - peptide like is a HETATM group (consistent with biojava)
+    if(currentGroupType.equals("PEPTIDE-LIKE")){
+      return 0;
+    }
+    // Again to correspond with Biojava - but I suspect we really want this to be 1
+    if(currentGroupType.equals("D-PEPTIDE LINKING")){
+      return 0;
+    }
     if(currentGroupType.contains("PEPTIDE")){
       return 1;
     }
