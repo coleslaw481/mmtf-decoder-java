@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class MmtfBean {
 
   /** The mmtf version. */
-  private String mmtfVersion = "0.1";
+  private String mmtfVersion;
 
   /** The mmtf producer. */
   private String mmtfProducer;
@@ -33,15 +33,15 @@ public class MmtfBean {
 
   /** The number of chains per model. */
   private int[] chainsPerModel;
+  
+  /** The internal groups per chain. */
+  private int[] groupsPerChain;
 
   /** The names of the chains. Each chain is allocated four bytes. Chain names can be up to four characters long. 0 bytes indicate the end of the chain name. These are taken from the auth id. */
   private byte[] chainNameList;
 
   /** The names of the chains. Each chain is allocated four bytes. Chain names can be up to four characters long. 0 bytes indicate the end of the chain name. These are taken from the asym id. */
   private byte[] chainIdList;
-
-  /** The internal groups per chain. */
-  private int[] groupsPerChain;
 
   /** The space group. */
   private String spaceGroup;
@@ -115,6 +115,83 @@ public class MmtfBean {
   
   /** The experimental method(s). */
   private List<String> experimentalMethods;
+  
+  /** The resolution in Angstrom. -1.0 if not applicable*/
+  private float resolution;
+  
+  /** The rfree. -1.0 if not applicable */
+  private float rFree;
+  
+  /** The r-work. -1.0 if not applicable */
+  private float rWork;
+  
+  /** Constructor to set the default values for floats */
+  public MmtfBean() {
+    
+    /** The mmtf version. Set here. */
+    mmtfVersion = "0.1";
+
+    /** The mmtf producer. NA is default and means error. */
+    mmtfProducer = "NA";
+    
+    /** The resolution in Angstrom. -1.0 if not applicable*/
+    resolution = (float) -1.0;
+    
+    /** The rfree. -1.0 if not applicable */
+    rFree = (float) -1.0;
+    
+    /** The number of atoms. Default is -1 indicates error */
+    numAtoms = -1;
+    
+    /** The number of bonds. Default of -1 indicates error*/
+    numBonds = -1;
+
+  }
+  
+  /**
+   * @return the resolution
+   */
+  public float getResolution() {
+    return resolution;
+  }
+
+  /**
+   * @param resolution the resolution to set
+   */
+  public void setResolution(float resolution) {
+    this.resolution = resolution;
+  }
+
+  /**
+   * @return the rFree
+   */
+  public float getrFree() {
+    return rFree;
+  }
+
+  /**
+   * @param rFree the rFree to set
+   */
+  public void setrFree(float rFree) {
+    this.rFree = rFree;
+  }
+
+  /**
+   * @return the rWork
+   */
+  public float getrWork() {
+    return rWork;
+  }
+
+  /**
+   * @param rWork the rWork to set
+   */
+  public void setrWork(float rWork) {
+    this.rWork = rWork;
+  }
+
+  
+  /*
 
   /**
    * Gets the space group.
