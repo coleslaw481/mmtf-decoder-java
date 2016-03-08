@@ -692,14 +692,14 @@ public class MmtfBean {
   }
 
   /**
-   * @return the sequence on a per chain level
+   * @return the sequence on a per (asym) chain level.
    */
   public List<String> getChainSeqList() {
     return chainSeqList;
   }
 
   /**
-   * @param sequence the sequence to set
+   * @param sequence the list of strings (sequences per asym chain) to set.
    */
   public void setChainSeqList(List<String> sequence) {
     this.chainSeqList = sequence;
