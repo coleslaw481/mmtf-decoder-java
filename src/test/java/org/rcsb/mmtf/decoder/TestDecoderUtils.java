@@ -15,8 +15,6 @@ import java.util.Random;
 import static org.junit.Assert.assertArrayEquals;
 
 
-
-
 public class TestDecoderUtils {
   
   private static final int NUM_EXAMPLES = 100;

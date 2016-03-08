@@ -19,8 +19,6 @@ import org.rcsb.mmtf.dataholders.BiologicalAssemblyTransformationNew;
 import org.rcsb.mmtf.dataholders.MmtfBean;
 import org.rcsb.mmtf.dataholders.PDBGroup;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -449,23 +447,29 @@ public class DecodeStructure {
   }
 
   /**
-   * The constructor requires a byte array to fill the data
-   * @param inputByteArr
-   * @throws JsonParseException
-   * @throws JsonMappingException
-   * @throws IOException
+   * The constructor requires a byte array to fill the data. This will decompress the arrays using our bespoke methods.
+   * @param inputByteArr An unentropy encoded byte array with the data as found in the MMTF format
    */
-  public DecodeStructure(byte[] inputByteArr) throws JsonParseException, JsonMappingException, IOException{
+  public DecodeStructure(byte[] inputByteArr) {
     // Get the decompressors to build in the data structure
     DeltaDeCompress deltaDecompress = new DeltaDeCompress();
     RunLengthDelta intRunLengthDelta = new RunLengthDelta();
     RunLengthDecodeInt intRunLength = new RunLengthDecodeInt();
     RunLengthDecodeString stringRunlength = new RunLengthDecodeString();
     DecoderUtils decoderUtils = new DecoderUtils();
-    MmtfBean inputData = new ObjectMapper(new
-        MessagePackFactory()).readValue(inputByteArr, MmtfBean.class);
+    MmtfBean inputData = null;
+    try {
+      inputData = new ObjectMapper(new MessagePackFactory()).readValue(inputByteArr, MmtfBean.class);
+    } catch (IOException e) {
+      // 
+      System.out.println("Error converting Byte array to message pack. IOError");
+      e.printStackTrace();
+      throw new RuntimeException();
+    }
     // Get the data
-    groupList = decoderUtils.bytesToInts(inputData.getGroupTypeList());
+    try {
+      groupList = decoderUtils.bytesToInts(inputData.getGroupTypeList());
+      
     // Read the byte arrays as int arrays
     cartnX = deltaDecompress.decompressByteArray(inputData.getxCoordBig(),
         inputData.getxCoordSmall());
@@ -500,6 +504,12 @@ public class DecodeStructure {
     interGroupBondIndices = decoderUtils.bytesToInts(inputData.getBondAtomList());
     interGroupBondOrders = decoderUtils.bytesToByteInts(inputData.getBondOrderList());
     sequenceInfo = inputData.getChainSeqList();
+    }
+    catch (IOException ioException){
+      System.out.println("Error reading in byte arrays from message pack");
+      ioException.printStackTrace();
+      throw new RuntimeException();
+    }
   }
 
   /**
@@ -508,10 +518,8 @@ public class DecodeStructure {
    * @param myInBytes the my in bytes
    * @param inputStructInflator the input struct inflator
    * @param parsingParams the parsing params
-   * @throws IOException Signals that an I/O exception has occurred.
    */
-  public final void getStructFromByteArray(final StructureDecoderInterface inputStructInflator,
-      final ParsingParams parsingParams) throws IOException {    
+  public final void getStructFromByteArray(final StructureDecoderInterface inputStructInflator, final ParsingParams parsingParams) {    
     // Set the inflator
     structInflator = inputStructInflator;
     // Now get the parsing parameters to do their thing

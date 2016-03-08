@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.biojava.nbio.structure.Structure;
+import org.rcsb.mmtf.decoder.ParsingParams;
 
 /**
  * An example script to run the decoder.
@@ -31,9 +32,13 @@ public final class ExampleScript {
   FileNotFoundException, IOException {
     // Set the PDB_CACHE_DIR path
     System.setProperty("PDB_CACHE_DIR", "/Users/anthony/PDB_CACHE");
-    GetBioJavaStructs gbjs = new GetBioJavaStructs();
-    Structure thatStruct = gbjs.getFromUrl("1qmz");
-    System.out.println(thatStruct.getChains());
+    HandleIO gbjs = new HandleIO();
+    byte[] inputByteArr = gbjs.getFromUrl("1qmz");
+    ParsingParams parsingParms = new ParsingParams();
+    parsingParms.setParseInternal(false);
+    ParseUsingBioJava parseUseBiojava = new ParseUsingBioJava();
+    Structure biojavaStruct = parseUseBiojava.getBiojavaStruct(inputByteArr, parsingParms);
+    System.out.println(biojavaStruct.getChains());
   }
 
 }
