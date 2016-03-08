@@ -3,6 +3,12 @@ package org.rcsb.mmtf.examples;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.UUID;
+
 import static org.junit.Assert.assertArrayEquals;
 
 public class TestHandleIO {
@@ -39,13 +45,21 @@ public class TestHandleIO {
    */
   @Test
   public void testReadWriteFiles() {
+    Path tmpDir;
+    String uuid = UUID.randomUUID().toString();
+    try {
+      tmpDir = Files.createTempDirectory(uuid);
+    } catch (IOException e) {
+      System.err.println("Error in making temp directory");
+      e.printStackTrace();
+      throw new RuntimeException();
+    }
+    // If we set it as the tmp directory
+    System.setProperty("PDB_CACHE_DIR", tmpDir.toAbsolutePath().toString());
     // The input code
     String inputCode = "4cup";
-    // If we don't set where the cache is
+    // If we don't set where the cache is this should be empty
     assertEquals(handleIo.getFromFile(inputCode), null);
-    // If we set it as the tmp directory
-    String tmpDirPath  = System.getProperty("java.io.tmpdir");
-    System.setProperty("PDB_CACHE_DIR", tmpDirPath);
     byte[] urlData = handleIo.getFromUrlOrFile(inputCode);
     byte[] fileData = handleIo.getFromFile(inputCode);
     // First check neither are null

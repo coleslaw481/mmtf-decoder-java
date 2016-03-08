@@ -400,14 +400,14 @@ public class DecodeStructure {
    * @return the seqResGroupList
    */
   public int[] getSeqResGroupList() {
-    return seqResGroupList;
+    return this.seqResGroupList;
   }
 
   /**
    * @param seqResGroupList the seqResGroupList to set
    */
-  public void setSeqResGroupList(int[] seqResGroupList) {
-    this.seqResGroupList = seqResGroupList;
+  public void setSeqResGroupList(int[] inputSeqResGroupList) {
+    seqResGroupList = inputSeqResGroupList;
   }
 
   /**
