@@ -30,6 +30,8 @@ public class CheckOnRawApi {
     assertNotEquals(decodeStructure.getMmtfProducer(), null);
     assertNotEquals(decodeStructure.getMmtfVersion(), null);
     checkIfSeqResInfoSame(biojavaStruct, params);
+    // Check other features in the data
+      
   }
   
   
