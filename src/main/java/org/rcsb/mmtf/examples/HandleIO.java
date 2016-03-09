@@ -75,11 +75,9 @@ public class HandleIO {
     } catch (MalformedURLException e) {
       // 
       System.err.println("Error in forming URL. Returning empty byte array");
-      e.printStackTrace();
       return null;
     } catch (IOException e) {
       System.err.println("Error in getting data from URL. Returning empty byte array");
-      e.printStackTrace();
       return null;
     }
     // Cache the data on the file system
@@ -131,7 +129,6 @@ public class HandleIO {
       inputByteArr = deflateGzip(IOUtils.toByteArray(new FileInputStream(new File(fullPath))));
     } catch (IOException e) {
       System.err.println("Could not find file: "+fullPath);
-      e.printStackTrace();
       return null;
     }
     // Now return it
